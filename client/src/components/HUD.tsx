@@ -1,43 +1,74 @@
-import { Settings } from "lucide-react";
+import { Settings, Archive, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 interface HUDProps {
-  currentMission: number;
-  totalMissions: number;
-  completedMissions: number;
+  currentView: "missions" | "game" | "archives" | "achievements";
+  level: number;
+  xp: number;
+  achievementCount: number;
   onSettingsClick: () => void;
+  onNavigate: (view: "missions" | "archives" | "achievements") => void;
 }
 
-export default function HUD({ currentMission, totalMissions, completedMissions, onSettingsClick }: HUDProps) {
-  const progress = Math.round((completedMissions / totalMissions) * 100);
-
+export default function HUD({
+  currentView,
+  level,
+  xp,
+  achievementCount,
+  onSettingsClick,
+  onNavigate
+}: HUDProps) {
   return (
     <div className="h-14 border-b-2 border-primary/30 bg-card flex items-center justify-between px-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none" />
       
       <div className="flex items-center gap-4 z-10">
-        <div className="font-orbitron text-xl font-bold tracking-wider">
+        <button
+          onClick={() => onNavigate("missions")}
+          className="font-orbitron text-xl font-bold tracking-wider hover-elevate px-2 py-1 rounded-md transition-all"
+          data-testid="button-logo"
+        >
           <span className="text-primary">GEARZ</span>
           <span className="text-muted-foreground mx-1">//</span>
           <span className="text-accent">OSINT</span>
-        </div>
+        </button>
         
         <div className="hidden md:flex items-center gap-2">
-          <Badge variant="outline" className="font-mono text-xs" data-testid="badge-mission-count">
-            MISSION {currentMission}/{totalMissions}
+          <Badge variant="outline" className="font-mono text-xs" data-testid="badge-level">
+            LVL {level}
           </Badge>
-          <Badge variant="outline" className="font-mono text-xs bg-primary/10" data-testid="badge-progress">
-            {progress}% COMPLETE
+          <Badge variant="outline" className="font-mono text-xs bg-primary/10" data-testid="badge-xp">
+            {xp.toLocaleString()} XP
           </Badge>
         </div>
       </div>
 
       <div className="flex items-center gap-2 z-10">
-        <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-muted-foreground">
-          <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-          <span>SYSTEM ONLINE</span>
-        </div>
+        <Button
+          size="icon"
+          variant={currentView === "archives" ? "default" : "ghost"}
+          onClick={() => onNavigate("archives")}
+          data-testid="button-archives"
+          className="hover-elevate"
+        >
+          <Archive className="w-5 h-5" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant={currentView === "achievements" ? "default" : "ghost"}
+          onClick={() => onNavigate("achievements")}
+          data-testid="button-achievements"
+          className="hover-elevate relative"
+        >
+          <Trophy className="w-5 h-5" />
+          {achievementCount > 0 && (
+            <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-xs">
+              {achievementCount}
+            </Badge>
+          )}
+        </Button>
         
         <Button
           size="icon"

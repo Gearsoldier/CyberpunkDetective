@@ -1,17 +1,47 @@
 import { z } from "zod";
 
-export const toolTypes = ["search", "whois", "metadata", "pastebin"] as const;
+export const toolTypes = ["search", "whois", "metadata", "pastebin", "linkedin", "dns", "email"] as const;
 export type ToolType = typeof toolTypes[number];
+
+export const difficultyLevels = ["beginner", "intermediate", "advanced", "expert"] as const;
+export type DifficultyLevel = typeof difficultyLevels[number];
+
+export const gameModes = ["beginner", "expert"] as const;
+export type GameMode = typeof gameModes[number];
 
 export interface Mission {
   id: number;
   title: string;
   brief: string;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: DifficultyLevel;
   tools: ToolType[];
   solution: Record<string, string>;
   explanation: string;
-  unlocked: boolean;
+  hints: {
+    beginner: string[];
+    expert: string[];
+  };
+  minLevel: number;
+  xpReward: number;
+}
+
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  condition: (progress: PlayerProgress) => boolean;
+}
+
+export interface PlayerProgress {
+  xp: number;
+  level: number;
+  completedMissions: number[];
+  achievements: string[];
+  missionScores: Record<number, number>;
+  missionAttempts: Record<number, number>;
+  totalPlayTime: number;
+  mode: GameMode;
 }
 
 export interface ToolResult {
@@ -20,11 +50,11 @@ export interface ToolResult {
   data: any;
 }
 
-export interface MissionProgress {
+export interface MissionAttempt {
   missionId: number;
-  completed: boolean;
-  score?: number;
-  attempts: number;
+  report: string;
+  timeElapsed: number;
+  timestamp: number;
 }
 
 export const aiConfigSchema = z.object({
@@ -39,6 +69,27 @@ export type AIConfig = z.infer<typeof aiConfigSchema>;
 export const reportSubmissionSchema = z.object({
   missionId: z.number(),
   report: z.string().min(10, "Report must be at least 10 characters"),
+  mode: z.enum(["beginner", "expert"]),
 });
 
 export type ReportSubmission = z.infer<typeof reportSubmissionSchema>;
+
+// XP and Level calculations
+export function calculateLevel(xp: number): number {
+  return Math.floor(Math.sqrt(xp / 100)) + 1;
+}
+
+export function xpForLevel(level: number): number {
+  return Math.pow(level - 1, 2) * 100;
+}
+
+export function xpForNextLevel(currentXp: number): number {
+  const currentLevel = calculateLevel(currentXp);
+  return xpForLevel(currentLevel + 1);
+}
+
+export function calculateMissionXP(baseXP: number, mode: GameMode, score: number): number {
+  const modeMultiplier = mode === "expert" ? 1.5 : 1.0;
+  const scoreMultiplier = score / 100;
+  return Math.floor(baseXP * modeMultiplier * scoreMultiplier);
+}
