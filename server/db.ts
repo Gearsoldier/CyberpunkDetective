@@ -12,6 +12,10 @@ const DEFAULT_PROGRESS: PlayerProgress = {
   missionAttempts: {},
   totalPlayTime: 0,
   mode: "beginner",
+  codename: undefined,
+  introCompleted: false,
+  missionTimings: {},
+  theme: "cyan",
 };
 
 export async function getPlayerProgress(): Promise<PlayerProgress> {

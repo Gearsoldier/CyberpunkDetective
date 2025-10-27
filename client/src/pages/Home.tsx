@@ -16,6 +16,7 @@ import ModeSelector from "@/components/ModeSelector";
 import MissionTimer from "@/components/MissionTimer";
 import HintPanel from "@/components/HintPanel";
 import AnimatedBackground from "@/components/AnimatedBackground";
+import IntroSequence from "@/components/IntroSequence";
 import { missions } from "@/lib/missions";
 import { useToast } from "@/hooks/use-toast";
 import type { Mission, PlayerProgress, GameMode, MissionAttempt, Achievement } from "@shared/schema";
@@ -45,6 +46,21 @@ export default function Home() {
 
   const { data: progress, isLoading } = useQuery<PlayerProgress>({
     queryKey: ["/api/progress"],
+  });
+
+  const setCodename = useMutation({
+    mutationFn: async (codename: string) => {
+      const response = await fetch("/api/progress/codename", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ codename }),
+      });
+      if (!response.ok) throw new Error("Failed to set codename");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/progress"] });
+    },
   });
 
   const updateMode = useMutation({
@@ -199,6 +215,10 @@ export default function Home() {
     setTimeElapsed(0);
   };
 
+  const handleIntroComplete = (codename: string) => {
+    setCodename.mutate(codename);
+  };
+
   if (isLoading || !progress) {
     return (
       <div className="h-screen flex items-center justify-center bg-background">
@@ -210,6 +230,11 @@ export default function Home() {
         </div>
       </div>
     );
+  }
+
+  // Show intro sequence if not completed
+  if (!progress.introCompleted) {
+    return <IntroSequence onComplete={handleIntroComplete} />;
   }
 
   return (

@@ -42,6 +42,10 @@ export interface PlayerProgress {
   missionAttempts: Record<number, number>;
   totalPlayTime: number;
   mode: GameMode;
+  codename?: string;
+  introCompleted?: boolean;
+  missionTimings: Record<number, number>; // Track time spent on each mission
+  theme?: "cyan" | "amber" | "violet";
 }
 
 export interface ToolResult {

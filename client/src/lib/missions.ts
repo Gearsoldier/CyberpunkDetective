@@ -230,6 +230,124 @@ export const missions: Mission[] = [
     },
     minLevel: 8,
     xpReward: 500
+  },
+  {
+    id: 11,
+    title: "Certificate Transparency Hunt",
+    brief: "A target organization 'quantumtech.io' has been rapidly expanding its infrastructure. Use Certificate Transparency logs to discover all their SSL certificates and subdomains. This reveals their entire web presence including hidden services and development environments.",
+    difficulty: "expert",
+    tools: ["search"],
+    solution: {
+      subdomains_found: "23",
+      wildcard_certs: "yes",
+      cdn_provider: "Cloudflare"
+    },
+    explanation: "Certificate Transparency (CT) logs are public records of all SSL/TLS certificates issued. They're a goldmine for subdomain enumeration because every HTTPS-enabled service must have a certificate. Search 'site:crt.sh quantumtech.io' or use specialized CT log viewers to discover the full attack surface.",
+    hints: {
+      beginner: [
+        "Search for: site:crt.sh quantumtech.io",
+        "Certificate logs reveal all subdomains with HTTPS",
+        "Look for patterns in subdomain naming"
+      ],
+      expert: ["Identify wildcard certificates and shared infrastructure"]
+    },
+    minLevel: 8,
+    xpReward: 550
+  },
+  {
+    id: 12,
+    title: "Breach Database Investigation",
+    brief: "Intelligence indicates that employees from 'techventures.com' may have had their credentials exposed in recent data breaches. Search breach databases and paste sites to identify compromised accounts. Document usernames, breach dates, and associated services.",
+    difficulty: "expert",
+    tools: ["pastebin", "search"],
+    solution: {
+      breached_accounts: "8",
+      breach_date: "2023-Q2",
+      services: "LinkedIn, Adobe, Dropbox"
+    },
+    explanation: "Breach databases like Have I Been Pwned track credential leaks across hundreds of data breaches. OSINT investigators monitor these for corporate exposure. Even old breaches matter - people reuse passwords. Use Google dorks 'site:pastebin.com @techventures.com password' to find leaked credentials.",
+    hints: {
+      beginner: [
+        "Search pastebin for email patterns",
+        "Look for dumps containing company domain",
+        "Document the breach source and date"
+      ],
+      expert: ["Correlate breaches across multiple paste sites and forums"]
+    },
+    minLevel: 9,
+    xpReward: 600
+  },
+  {
+    id: 13,
+    title: "Social Media Archaeology",
+    brief: "A person of interest deleted their social media presence, but the internet never forgets. Use archive sites and cached search results to recover deleted posts, profile information, and connections from the username 'gh0st_trader_2019'. Reconstruct their digital timeline.",
+    difficulty: "expert",
+    tools: ["search"],
+    solution: {
+      archived_posts: "found",
+      real_name: "identified",
+      connections: "cryptocurrency trading group"
+    },
+    explanation: "The Internet Archive (Wayback Machine) and Google's cache preserve deleted content. Search 'cache:username' or 'site:archive.org username' to find removed posts. Deleted doesn't mean gone - cached pages, screenshots, and archives persist for years. This technique is crucial for attribution and background investigations.",
+    hints: {
+      beginner: [
+        "Search: site:archive.org gh0st_trader_2019",
+        "Try Google cache for recent deletions",
+        "Look for mentions of the username on other sites"
+      ],
+      expert: ["Cross-reference multiple archive sources and timestamps"]
+    },
+    minLevel: 10,
+    xpReward: 650
+  },
+  {
+    id: 14,
+    title: "Tracking the Dark Web Footprint",
+    brief: "A threat actor is operating on both clear web and dark web forums. You've found their handle 'CipherPhantom' on a public paste site. Search for their activity patterns, cryptocurrency addresses, and operational security mistakes that could reveal their identity or location.",
+    difficulty: "expert",
+    tools: ["search", "pastebin"],
+    solution: {
+      bitcoin_address: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+      timezone: "UTC+3",
+      opsec_failure: "reused email pattern"
+    },
+    explanation: "Threat actors often reuse usernames, crypto addresses, and PGP keys across platforms. These unique identifiers create attribution trails. Analyze posting times for timezone inference, search for address reuse in blockchain explorers, and look for OPSEC failures like reused emails or metadata leaks. One mistake can compromise years of anonymity.",
+    hints: {
+      beginner: [
+        "Search for the username across multiple platforms",
+        "Bitcoin addresses are unique identifiers",
+        "Posting patterns reveal timezone and habits"
+      ],
+      expert: ["Build a correlation map of all digital artifacts"]
+    },
+    minLevel: 11,
+    xpReward: 700
+  },
+  {
+    id: 15,
+    title: "The Attribution Chain",
+    brief: "ULTIMATE CHALLENGE: You've intercepted communications about a planned cyberattack. Using a single email address 'operations@zephyr-tech.net', build a complete intelligence profile: 1) Domain infrastructure, 2) Associated accounts across platforms, 3) Breach exposure, 4) Geographic indicators, 5) Threat actor attribution. This is professional-grade threat intelligence work.",
+    difficulty: "expert",
+    tools: ["whois", "search", "metadata", "pastebin"],
+    solution: {
+      domain_registrar: "Namecheap",
+      hosting_country: "Romania",
+      associated_breaches: "2",
+      linked_social_accounts: "4",
+      threat_group: "FIN7"
+    },
+    explanation: "Professional threat intelligence combines all OSINT disciplines into comprehensive attribution. Start with domain WHOIS, pivot to associated infrastructure, search for credential leaks, analyze social media presence, correlate posting patterns, and build a timeline. The goal is answering: WHO, WHAT, WHERE, WHEN, WHY. This capstone mission tests everything you've learned.",
+    hints: {
+      beginner: [
+        "Start with WHOIS on the domain",
+        "Search the email across all platforms",
+        "Document every finding with timestamps",
+        "Look for patterns connecting different data points"
+      ],
+      expert: ["Build a complete threat actor profile with high confidence attribution"]
+    },
+    minLevel: 12,
+    xpReward: 1000
   }
 ];
 

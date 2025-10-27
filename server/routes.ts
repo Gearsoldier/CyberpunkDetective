@@ -174,6 +174,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/progress/codename", async (req, res) => {
+    try {
+      const codenameSchema = z.object({
+        codename: z.string().min(3).max(20)
+      });
+      
+      const validationResult = codenameSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          error: "Invalid codename", 
+          details: validationResult.error 
+        });
+      }
+
+      const progress = await getPlayerProgress();
+      const updatedProgress = {
+        ...progress,
+        codename: validationResult.data.codename,
+        introCompleted: true
+      };
+      
+      await savePlayerProgress(updatedProgress);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error updating codename:", error);
+      res.status(500).json({ error: "Failed to update codename" });
+    }
+  });
+
   app.post("/api/progress/reset", async (req, res) => {
     try {
       await resetPlayerProgress();
