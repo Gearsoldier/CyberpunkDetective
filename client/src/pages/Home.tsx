@@ -63,6 +63,25 @@ export default function Home() {
     },
   });
 
+  const resetProgress = useMutation({
+    mutationFn: async () => {
+      const response = await fetch("/api/progress/reset", {
+        method: "POST",
+      });
+      if (!response.ok) throw new Error("Failed to reset progress");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/progress"] });
+      toast({
+        title: "Progress Reset",
+        description: "All progress has been cleared. Starting fresh!",
+      });
+      setCurrentView("missions");
+      setCurrentMission(null);
+    },
+  });
+
   const updateMode = useMutation({
     mutationFn: async (mode: GameMode) => {
       const response = await fetch("/api/progress/mode", {
@@ -342,7 +361,11 @@ export default function Home() {
         </div>
       )}
 
-      <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <SettingsPanel 
+        open={settingsOpen} 
+        onClose={() => setSettingsOpen(false)}
+        onResetProgress={() => resetProgress.mutate()}
+      />
       <EnhancedMentorDialog
         open={mentorOpen}
         onClose={() => setMentorOpen(false)}

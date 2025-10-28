@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Save, ExternalLink, HelpCircle } from "lucide-react";
+import { X, Save, ExternalLink, HelpCircle, Trash2, AlertTriangle } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -22,13 +22,25 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import type { AIConfig } from "@shared/schema";
 
 interface SettingsPanelProps {
   open: boolean;
   onClose: () => void;
+  onResetProgress?: () => void;
 }
 
 const defaultConfigs = {
@@ -46,11 +58,12 @@ const defaultConfigs = {
   },
 };
 
-export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
+export default function SettingsPanel({ open, onClose, onResetProgress }: SettingsPanelProps) {
   const [provider, setProvider] = useState<"openai" | "huggingface" | "custom">("huggingface");
   const [apiKey, setApiKey] = useState("");
   const [apiEndpoint, setApiEndpoint] = useState(defaultConfigs.huggingface.apiEndpoint);
   const [model, setModel] = useState(defaultConfigs.huggingface.model);
+  const [showResetDialog, setShowResetDialog] = useState(false);
 
   const handleProviderChange = (value: string) => {
     const newProvider = value as "openai" | "huggingface" | "custom";
@@ -219,8 +232,66 @@ export default function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               Save Configuration
             </Button>
           </div>
+
+          <Separator className="my-6" />
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-destructive" />
+              <h3 className="font-rajdhani uppercase tracking-wide text-sm text-destructive">
+                Danger Zone
+              </h3>
+            </div>
+            <Card className="p-4 bg-destructive/5 border-destructive/20">
+              <p className="text-sm text-muted-foreground mb-4">
+                Reset all progress including completed missions, XP, level, achievements, and codename. This action cannot be undone.
+              </p>
+              <Button
+                variant="destructive"
+                onClick={() => setShowResetDialog(true)}
+                className="w-full font-rajdhani uppercase tracking-wide"
+                data-testid="button-reset-progress"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Reset All Progress
+              </Button>
+            </Card>
+          </div>
         </div>
       </SheetContent>
+
+      <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-orbitron">Confirm Progress Reset</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-2">
+              <p>This will permanently delete:</p>
+              <ul className="list-disc list-inside text-sm space-y-1 my-2">
+                <li>All completed missions and scores</li>
+                <li>Your XP and level progress</li>
+                <li>Unlocked achievements</li>
+                <li>Your operative codename</li>
+                <li>Mission timings and statistics</li>
+              </ul>
+              <p className="font-semibold text-destructive">This action cannot be undone.</p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-testid="button-cancel-reset">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                onResetProgress?.();
+                setShowResetDialog(false);
+                onClose();
+              }}
+              className="bg-destructive hover:bg-destructive/90"
+              data-testid="button-confirm-reset"
+            >
+              Reset Everything
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Sheet>
   );
 }

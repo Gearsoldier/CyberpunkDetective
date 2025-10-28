@@ -1,4 +1,5 @@
-import { Settings, Archive, Trophy } from "lucide-react";
+import { Settings, Archive, Trophy, Info } from "lucide-react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -70,6 +71,17 @@ export default function HUD({
           )}
         </Button>
         
+        <Link href="/about">
+          <Button
+            size="icon"
+            variant="ghost"
+            data-testid="button-about"
+            className="hover-elevate"
+          >
+            <Info className="w-5 h-5" />
+          </Button>
+        </Link>
+
         <Button
           size="icon"
           variant="ghost"
