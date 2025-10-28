@@ -118,6 +118,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         missionAttempts: {
           ...progress.missionAttempts,
           [attempt.missionId]: (progress.missionAttempts[attempt.missionId] || 0) + 1
+        },
+        missionTimings: {
+          ...progress.missionTimings,
+          [attempt.missionId]: attempt.timeElapsed || 0
         }
       };
 

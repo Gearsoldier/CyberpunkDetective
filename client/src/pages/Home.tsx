@@ -17,6 +17,8 @@ import MissionTimer from "@/components/MissionTimer";
 import HintPanel from "@/components/HintPanel";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import IntroSequence from "@/components/IntroSequence";
+import TrainingReport from "@/components/TrainingReport";
+import WhatYouLearned from "@/components/WhatYouLearned";
 import { missions } from "@/lib/missions";
 import { useToast } from "@/hooks/use-toast";
 import type { Mission, PlayerProgress, GameMode, MissionAttempt, Achievement } from "@shared/schema";
@@ -28,6 +30,8 @@ export default function Home() {
   const [currentMission, setCurrentMission] = useState<Mission | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [mentorOpen, setMentorOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [showLearning, setShowLearning] = useState(false);
   const [mentorData, setMentorData] = useState<{
     score?: number;
     feedback?: string;
@@ -159,15 +163,11 @@ export default function Home() {
     setTimeElapsed(0);
   };
 
-  const handleBackToMissions = () => {
-    setCurrentMission(null);
-    setCurrentView("missions");
-  };
-
   const handleNavigate = (view: View) => {
     setCurrentView(view);
     if (view !== "game") {
       setCurrentMission(null);
+      setShowLearning(false);
     }
   };
 
@@ -206,6 +206,7 @@ export default function Home() {
 
       setIsSubmitting(false);
       setMentorOpen(true);
+      setShowLearning(true);
     } catch (error: any) {
       console.error("Error completing mission:", error);
       const errorMessage = error?.message || "Failed to submit report";
@@ -220,6 +221,7 @@ export default function Home() {
 
   const handleNextMission = () => {
     setMentorOpen(false);
+    setShowLearning(false);
     const nextMission = missions.find(m => m.id === (currentMission?.id || 0) + 1);
     if (nextMission && nextMission.minLevel <= (progress?.level || 1)) {
       handleSelectMission(nextMission);
@@ -230,8 +232,15 @@ export default function Home() {
 
   const handleRetryMission = () => {
     setMentorOpen(false);
+    setShowLearning(false);
     setMissionStartTime(Date.now());
     setTimeElapsed(0);
+  };
+
+  const handleBackToMissions = () => {
+    setCurrentMission(null);
+    setCurrentView("missions");
+    setShowLearning(false);
   };
 
   const handleIntroComplete = (codename: string) => {
@@ -257,7 +266,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-background relative">
+    <div className="h-screen flex flex-col bg-background relative transition-smooth">
       <AnimatedBackground />
 
       <HUD
@@ -265,12 +274,14 @@ export default function Home() {
         level={progress?.level ?? 1}
         xp={progress?.xp ?? 0}
         achievementCount={progress?.achievements?.length ?? 0}
+        codename={progress?.codename}
         onSettingsClick={() => setSettingsOpen(true)}
         onNavigate={handleNavigate}
+        onShowReport={() => setReportOpen(true)}
       />
 
       {currentView === "missions" && (
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto fade-in">
           <div className="max-w-7xl mx-auto p-6 space-y-6">
             <ProgressBar
               xp={progress?.xp}
@@ -293,18 +304,18 @@ export default function Home() {
       )}
 
       {currentView === "game" && currentMission && (
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden fade-in">
           <div className="h-full flex flex-col lg:flex-row gap-4 p-4">
             <div className="lg:w-1/4 space-y-4">
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   onClick={handleBackToMissions}
-                  className="flex-1 font-rajdhani uppercase tracking-wide"
+                  className="flex-1 font-rajdhani uppercase tracking-wide neon-glow"
                   data-testid="button-back-to-missions"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  Missions
+                  Return to HQ
                 </Button>
                 {(progress?.mode ?? "beginner") === "expert" && (
                   <MissionTimer
@@ -323,8 +334,11 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="lg:w-1/2 lg:h-full">
+            <div className="lg:w-1/2 lg:h-full flex flex-col gap-4">
               <ToolPanel availableTools={currentMission.tools} />
+              {showLearning && currentMission && (
+                <WhatYouLearned mission={currentMission} show={showLearning} />
+              )}
             </div>
 
             <div className="lg:w-1/4 lg:h-full">
@@ -346,7 +360,7 @@ export default function Home() {
       )}
 
       {currentView === "archives" && (
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto fade-in">
           <CaseArchives
             missions={missions}
             progress={progress}
@@ -356,9 +370,17 @@ export default function Home() {
       )}
 
       {currentView === "achievements" && (
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto fade-in">
           <AchievementsList progress={progress} />
         </div>
+      )}
+
+      {progress && (
+        <TrainingReport
+          open={reportOpen}
+          onClose={() => setReportOpen(false)}
+          progress={progress}
+        />
       )}
 
       <SettingsPanel 

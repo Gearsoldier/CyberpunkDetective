@@ -1,15 +1,18 @@
-import { Settings, Archive, Trophy, Info } from "lucide-react";
+import { Settings, Archive, Trophy, Info, BarChart3 } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import ThemeToggle from "./ThemeToggle";
 
 interface HUDProps {
   currentView: "missions" | "game" | "archives" | "achievements";
   level: number;
   xp: number;
   achievementCount: number;
+  codename?: string;
   onSettingsClick: () => void;
   onNavigate: (view: "missions" | "archives" | "achievements") => void;
+  onShowReport?: () => void;
 }
 
 export default function HUD({
@@ -17,11 +20,13 @@ export default function HUD({
   level,
   xp,
   achievementCount,
+  codename,
   onSettingsClick,
-  onNavigate
+  onNavigate,
+  onShowReport
 }: HUDProps) {
   return (
-    <div className="h-14 border-b-2 border-primary/30 bg-card flex items-center justify-between px-4 relative overflow-hidden">
+    <div className="h-14 border-b-2 border-primary/30 glass-strong flex items-center justify-between px-4 relative overflow-hidden neon-glow">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none" />
       
       <div className="flex items-center gap-4 z-10">
@@ -36,6 +41,11 @@ export default function HUD({
         </button>
         
         <div className="hidden md:flex items-center gap-2">
+          {codename && (
+            <Badge variant="outline" className="font-mono text-xs bg-accent/10" data-testid="badge-codename">
+              {codename}
+            </Badge>
+          )}
           <Badge variant="outline" className="font-mono text-xs" data-testid="badge-level">
             LVL {level}
           </Badge>
@@ -71,6 +81,18 @@ export default function HUD({
           )}
         </Button>
         
+        {onShowReport && (
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={onShowReport}
+            data-testid="button-training-report"
+            className="hover-elevate"
+          >
+            <BarChart3 className="w-5 h-5" />
+          </Button>
+        )}
+
         <Link href="/about">
           <Button
             size="icon"
@@ -81,6 +103,8 @@ export default function HUD({
             <Info className="w-5 h-5" />
           </Button>
         </Link>
+
+        <ThemeToggle />
 
         <Button
           size="icon"
