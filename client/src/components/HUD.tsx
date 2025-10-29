@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ThemeToggle from "./ThemeToggle";
+import DarkModeToggle from "./DarkModeToggle";
 
 interface HUDProps {
   currentView: "missions" | "game" | "archives" | "achievements";
@@ -104,6 +105,7 @@ export default function HUD({
           </Button>
         </Link>
 
+        <DarkModeToggle />
         <ThemeToggle />
 
         <Button

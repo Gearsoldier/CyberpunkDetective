@@ -1,0 +1,57 @@
+Prompt: GEARZ OSINT Detective v4.0 Upgrade
+
+Objective:
+Add final educational and replayability systems with an optional AI Instructor mode (only active if player enters a valid API key). Maintain performance and mobile support.
+
+Upgrades:
+1. 🎓 OSINT Glossary
+   • Add a “Knowledge Base” tab accessible from HUD.
+   • Store content in /data/glossary.json (term, definition, category, examples).
+   • Each glossary entry includes “Test Me” button to launch a quick 3-question quiz.
+   • Track glossary completion in DB for bonus XP.
+
+2. 🧠 Optional AI Instructor Mode
+   • Add toggle in Settings: “Enable AI Instructor”.
+   • When enabled, show API key input field.
+   • If valid OpenAI/HuggingFace key entered → activate instructor chat window in Mentor panel.
+   • Players can ask: “Explain this deeper” or “Show real-world example”.
+   • If no key, fallback to built-in static mentor dialogue.
+   • Keys never saved permanently — store only in sessionStorage.
+
+3. 🧩 Daily Cases System
+   • Add endpoint /api/daily to serve a random case template.
+   • Generate case ID + clue set daily (date-based seed).
+   • Track completion streaks and award bonus XP for consistent play.
+
+4. 🏆 Leaderboard
+   • Add /api/leaderboard for global scores (codename, XP, efficiency).
+   • Show top 10 agents; anonymize data if player opts out.
+   • Add “Share My Stats” button → copies summary text.
+
+5. 📚 Learning Flow Polish
+   • “What You Learned” panels link to glossary terms.
+   • Add mini-quiz after every 5 missions.
+   • Include retry button for wrong answers.
+
+6. 🎨 UI Enhancements
+   • Add glow ripple animation on buttons.
+   • Smooth mission transitions with sliding effect.
+   • Responsive grid fixes for ultra-wide and mobile.
+   • Optional music toggle + new ambient layer.
+
+7. ⚙️ Code/Architecture
+   • Glossary data → JSON.
+   • AI Instructor logic → /lib/instructor.ts.
+   • Leaderboard → /server/routes/leaderboard.js.
+   • Daily case generator → /server/routes/daily.js.
+   • Add environment variable: OPENAI_API_KEY (optional).
+
+8. 🚀 Finalize for Public Launch
+   • Verify all URLs (Replit, Contra, GitHub) in About page.
+   • Test both modes: AI Instructor ON/OFF.
+   • Ensure mobile responsiveness and data persistence.
+   • Deploy and publish Replit Showcase build.
+
+Goal:
+Deliver GEARZ OSINT Detective v4.0 — the definitive, gamified OSINT learning simulator with daily missions, global leaderboard, glossary learning, and optional AI Instructor for deeper training.
+
