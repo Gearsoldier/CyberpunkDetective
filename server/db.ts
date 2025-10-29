@@ -20,12 +20,19 @@ const DEFAULT_PROGRESS: PlayerProgress = {
 
 export async function getPlayerProgress(): Promise<PlayerProgress> {
   try {
-    const result = await db.get("player_progress");
-    const progress = result as any;
+    let result = await db.get("player_progress");
+    let progress = result as any;
+    
     if (!progress || typeof progress !== 'object') {
       await db.set("player_progress", DEFAULT_PROGRESS);
       return DEFAULT_PROGRESS;
     }
+    
+    // Unwrap any nested data caused by database corruption
+    while (progress.ok && progress.value && typeof progress.value === 'object') {
+      progress = progress.value;
+    }
+    
     // Merge with defaults to ensure all fields are present
     const mergedProgress: PlayerProgress = {
       ...DEFAULT_PROGRESS,
@@ -35,6 +42,7 @@ export async function getPlayerProgress(): Promise<PlayerProgress> {
       achievements: progress.achievements || [],
       missionScores: progress.missionScores || {},
       missionAttempts: progress.missionAttempts || {},
+      missionTimings: progress.missionTimings || {},
     };
     return mergedProgress;
   } catch (error) {
