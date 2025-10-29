@@ -1,0 +1,456 @@
+{
+  "terms": [
+    {
+      "id": "google-dorking",
+      "term": "Google Dorking",
+      "category": "Search Techniques",
+      "definition": "Advanced search operators used with Google to find specific information that isn't easily accessible through normal searches. Also known as Google Hacking.",
+      "examples": [
+        "site:example.com filetype:pdf - finds all PDFs on a specific site",
+        "inurl:admin - finds pages with 'admin' in the URL",
+        "intitle:\"index of\" - finds directory listings"
+      ],
+      "relatedMissions": [1],
+      "quiz": [
+        {
+          "question": "Which Google dork finds PDF files on a specific domain?",
+          "options": ["site:domain.com filetype:pdf", "domain.com type:pdf", "find:pdf site:domain.com", "pdf@domain.com"],
+          "correctIndex": 0
+        },
+        {
+          "question": "What does the 'inurl:' operator do?",
+          "options": ["Searches page titles", "Searches within URLs", "Searches file types", "Searches image names"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Which operator helps find directory listings?",
+          "options": ["site:", "intitle:\"index of\"", "filetype:", "cache:"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "whois",
+      "term": "WHOIS Lookup",
+      "category": "Domain Intelligence",
+      "definition": "A protocol for querying databases that store registered users or assignees of Internet resources, such as domain names, IP addresses, and autonomous systems.",
+      "examples": [
+        "Domain registration date reveals when a site was created",
+        "Registrar information shows who manages the domain",
+        "Nameserver data indicates hosting infrastructure"
+      ],
+      "relatedMissions": [2],
+      "quiz": [
+        {
+          "question": "What information does WHOIS provide about a domain?",
+          "options": ["Website content", "Registration details and owner info", "Server uptime", "Visitor statistics"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why is registration date important in investigations?",
+          "options": ["It shows server speed", "It reveals when domain was created/updated", "It indicates traffic volume", "It measures security"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What are nameservers?",
+          "options": ["Website admins", "Servers that translate domains to IPs", "Email servers", "Backup systems"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "metadata",
+      "term": "Metadata Analysis",
+      "category": "Digital Forensics",
+      "definition": "The examination of data about data - hidden information embedded in files like documents, images, and videos that reveals details about creation, modification, location, and authorship.",
+      "examples": [
+        "EXIF data in photos shows GPS coordinates and camera settings",
+        "Document properties reveal author names and edit history",
+        "File timestamps indicate when content was created or modified"
+      ],
+      "relatedMissions": [3],
+      "quiz": [
+        {
+          "question": "What type of metadata can reveal photo location?",
+          "options": ["File size", "EXIF GPS coordinates", "Color profile", "Resolution"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What can document metadata expose?",
+          "options": ["File encryption", "Author identity and edit history", "Download speed", "Printer settings"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why do investigators analyze file timestamps?",
+          "options": ["To check file size", "To determine when files were created/modified", "To validate passwords", "To measure performance"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "dns-records",
+      "term": "DNS Records",
+      "category": "Network Infrastructure",
+      "definition": "Domain Name System records that map domain names to IP addresses and provide information about mail servers, subdomains, and other network services.",
+      "examples": [
+        "A records map domains to IPv4 addresses",
+        "MX records specify mail server priorities",
+        "TXT records can contain SPF and verification data"
+      ],
+      "relatedMissions": [4],
+      "quiz": [
+        {
+          "question": "What does an A record do?",
+          "options": ["Stores authentication data", "Maps domain to IPv4 address", "Configures email", "Sets up SSL"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Which record type handles email routing?",
+          "options": ["A record", "CNAME", "MX record", "NS record"],
+          "correctIndex": 2
+        },
+        {
+          "question": "What information can TXT records contain?",
+          "options": ["Only plain text", "SPF, DKIM, domain verification", "Image data", "Encrypted passwords"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "email-headers",
+      "term": "Email Header Analysis",
+      "category": "Communication Forensics",
+      "definition": "Examination of email metadata including routing information, sender authentication, timestamps, and IP addresses to trace origin and verify authenticity.",
+      "examples": [
+        "Received headers show email routing path",
+        "SPF/DKIM/DMARC headers verify sender authenticity",
+        "X-Originating-IP reveals sender's IP address"
+      ],
+      "relatedMissions": [5],
+      "quiz": [
+        {
+          "question": "What do 'Received:' headers reveal?",
+          "options": ["Email content", "Routing path and servers", "Attachment types", "Recipient list"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Which header can expose sender's IP?",
+          "options": ["Subject", "X-Originating-IP", "To", "Date"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does SPF validation check?",
+          "options": ["Email size", "Sender authorization", "Spam score", "Encryption level"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "geolocation",
+      "term": "IP Geolocation",
+      "category": "Location Intelligence",
+      "definition": "The process of determining the geographical location of a device or user based on their IP address, including country, region, city, and ISP information.",
+      "examples": [
+        "MaxMind GeoIP databases provide location mapping",
+        "ISP information reveals network provider",
+        "City-level accuracy helps narrow suspect location"
+      ],
+      "relatedMissions": [6],
+      "quiz": [
+        {
+          "question": "What can IP geolocation determine?",
+          "options": ["Exact street address", "Approximate geographic location and ISP", "Device model", "Browser version"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What does ISP stand for?",
+          "options": ["Internet Security Protocol", "Internet Service Provider", "IP Security Platform", "Integrated Server Process"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How accurate is IP geolocation?",
+          "options": ["Exact GPS coordinates", "City/region level", "Street address", "Building number"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "social-media-osint",
+      "term": "Social Media OSINT",
+      "category": "Social Engineering",
+      "definition": "Collection and analysis of publicly available information from social media platforms to build profiles, track connections, and identify patterns of behavior.",
+      "examples": [
+        "LinkedIn reveals professional connections and employment history",
+        "Twitter/X shows posting patterns and associations",
+        "Photo metadata and tags expose locations and relationships"
+      ],
+      "relatedMissions": [7, 11],
+      "quiz": [
+        {
+          "question": "What can social media OSINT reveal?",
+          "options": ["Private messages", "Public profiles and connections", "Account passwords", "Bank details"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why analyze posting patterns?",
+          "options": ["To hack accounts", "To identify time zones and behavior", "To send spam", "To delete posts"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What's an ethical OSINT practice?",
+          "options": ["Creating fake profiles", "Only using publicly available data", "Buying private data", "Hacking accounts"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "reverse-image-search",
+      "term": "Reverse Image Search",
+      "category": "Visual Intelligence",
+      "definition": "Using an image as a search query to find where else it appears online, identify its source, find higher resolution versions, or detect manipulations.",
+      "examples": [
+        "Google Images finds similar and identical photos",
+        "TinEye tracks image history across the web",
+        "Yandex excels at facial recognition searches"
+      ],
+      "relatedMissions": [8],
+      "quiz": [
+        {
+          "question": "What is reverse image search used for?",
+          "options": ["Editing photos", "Finding image sources and duplicates", "Creating images", "Deleting images"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Which search engine is best for face recognition?",
+          "options": ["Google", "Yandex", "Bing", "DuckDuckGo"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What can you detect with reverse image search?",
+          "options": ["Image file size", "Where image appears online", "Camera brand", "Photo filters"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "web-archives",
+      "term": "Web Archives",
+      "category": "Historical Research",
+      "definition": "Services like the Wayback Machine that preserve snapshots of websites over time, allowing investigators to view historical versions and track changes.",
+      "examples": [
+        "Wayback Machine stores billions of web pages since 1996",
+        "Archive.today provides on-demand snapshots",
+        "Historical data reveals content that's been deleted or modified"
+      ],
+      "relatedMissions": [9],
+      "quiz": [
+        {
+          "question": "What does the Wayback Machine do?",
+          "options": ["Backs up computers", "Archives historical website snapshots", "Deletes old websites", "Speeds up browsing"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why use web archives in investigations?",
+          "options": ["To hack websites", "To view deleted/modified content", "To slow down sites", "To create websites"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How far back do web archives go?",
+          "options": ["Last week", "Since 1996", "Only current year", "Last 24 hours"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "ssl-certificates",
+      "term": "SSL/TLS Certificates",
+      "category": "Security Infrastructure",
+      "definition": "Digital certificates that authenticate website identity and enable encrypted connections. Certificate Transparency logs provide public records of all issued certificates.",
+      "examples": [
+        "crt.sh searches Certificate Transparency logs",
+        "Subject Alternative Names reveal related domains",
+        "Issuance dates indicate domain lifecycle"
+      ],
+      "relatedMissions": [10],
+      "quiz": [
+        {
+          "question": "What do SSL certificates verify?",
+          "options": ["Website speed", "Website identity and encryption", "User passwords", "Content quality"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What are Certificate Transparency logs?",
+          "options": ["Private databases", "Public records of issued certificates", "Hacker tools", "Backup systems"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What can SANs (Subject Alternative Names) reveal?",
+          "options": ["Server location", "Related domains under same certificate", "Encryption strength", "Website traffic"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "breach-databases",
+      "term": "Breach Databases",
+      "category": "Security Research",
+      "definition": "Collections of leaked credentials and personal information from data breaches, used to check if accounts have been compromised.",
+      "examples": [
+        "Have I Been Pwned tracks billions of breached accounts",
+        "Dehashed provides searchable breach data",
+        "Understanding exposure helps secure accounts"
+      ],
+      "relatedMissions": [11],
+      "quiz": [
+        {
+          "question": "What is Have I Been Pwned?",
+          "options": ["A hacking tool", "A service to check if emails were breached", "A password generator", "An antivirus"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why check breach databases?",
+          "options": ["To steal passwords", "To verify account security", "To create breaches", "To delete accounts"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What should you do if found in a breach?",
+          "options": ["Ignore it", "Change passwords immediately", "Share the info", "Do nothing"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "dark-web",
+      "term": "Dark Web Intelligence",
+      "category": "Advanced Investigation",
+      "definition": "Techniques for safely monitoring and gathering intelligence from hidden services and encrypted networks like Tor for threat intelligence and criminal investigations.",
+      "examples": [
+        "Onion addresses provide anonymous hidden services",
+        "Marketplaces and forums reveal criminal activity",
+        "OpSec (Operational Security) is critical for investigators"
+      ],
+      "relatedMissions": [13],
+      "quiz": [
+        {
+          "question": "What is the Dark Web?",
+          "options": ["A horror movie", "Encrypted network requiring special browsers", "A search engine", "A website blocker"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What browser accesses Tor hidden services?",
+          "options": ["Chrome", "Tor Browser", "Safari", "Edge"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why is OpSec important on the Dark Web?",
+          "options": ["To look cool", "To protect investigator identity and safety", "To hack faster", "To download files"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "opsec",
+      "term": "Operational Security (OpSec)",
+      "category": "Investigation Safety",
+      "definition": "Practices and procedures to protect sensitive information and maintain investigator anonymity during OSINT operations.",
+      "examples": [
+        "Using VPNs to mask IP addresses",
+        "Separate personas for different investigations",
+        "Avoiding disclosure of investigation methods"
+      ],
+      "relatedMissions": [13, 14, 15],
+      "quiz": [
+        {
+          "question": "What is OpSec?",
+          "options": ["A software tool", "Operational Security practices", "An operating system", "A file type"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why use VPNs in OSINT?",
+          "options": ["Faster internet", "Mask investigator identity", "Better graphics", "Save bandwidth"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What's a key OpSec principle?",
+          "options": ["Share everything", "Compartmentalize information", "Use real names", "Post on social media"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "attribution",
+      "term": "Digital Attribution",
+      "category": "Threat Intelligence",
+      "definition": "The process of identifying threat actors by analyzing patterns, infrastructure, tactics, techniques, and procedures (TTPs) across multiple indicators.",
+      "examples": [
+        "Infrastructure overlap links campaigns",
+        "Code similarities reveal shared authorship",
+        "Behavioral patterns identify threat groups"
+      ],
+      "relatedMissions": [15],
+      "quiz": [
+        {
+          "question": "What is digital attribution?",
+          "options": ["Giving credit", "Identifying threat actors", "Writing code", "Designing websites"],
+          "correctIndex": 1
+        },
+        {
+          "question": "What are TTPs in threat intelligence?",
+          "options": ["Technical Test Protocols", "Tactics, Techniques, and Procedures", "Training Test Programs", "Transfer Test Points"],
+          "correctIndex": 1
+        },
+        {
+          "question": "How do investigators link campaigns?",
+          "options": ["Random guesses", "Infrastructure and behavioral patterns", "Social media polls", "Email surveys"],
+          "correctIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "osint-framework",
+      "term": "OSINT Framework",
+      "category": "Methodology",
+      "definition": "Structured approach to open source intelligence gathering including planning, collection, analysis, and dissemination phases.",
+      "examples": [
+        "Define intelligence requirements first",
+        "Use multiple sources for verification",
+        "Document findings and sources properly"
+      ],
+      "relatedMissions": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+      "quiz": [
+        {
+          "question": "What's the first step in OSINT?",
+          "options": ["Start Googling", "Define intelligence requirements", "Write a report", "Pick random sources"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why use multiple sources?",
+          "options": ["To waste time", "For verification and accuracy", "To confuse yourself", "To fill reports"],
+          "correctIndex": 1
+        },
+        {
+          "question": "Why document OSINT sources?",
+          "options": ["Required by law", "For verification and reproducibility", "To look professional", "No real reason"],
+          "correctIndex": 1
+        }
+      ]
+    }
+  ],
+  "categories": [
+    "Search Techniques",
+    "Domain Intelligence",
+    "Digital Forensics",
+    "Network Infrastructure",
+    "Communication Forensics",
+    "Location Intelligence",
+    "Social Engineering",
+    "Visual Intelligence",
+    "Historical Research",
+    "Security Infrastructure",
+    "Security Research",
+    "Advanced Investigation",
+    "Investigation Safety",
+    "Threat Intelligence",
+    "Methodology"
+  ]
+}

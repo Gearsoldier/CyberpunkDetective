@@ -16,6 +16,11 @@ const DEFAULT_PROGRESS: PlayerProgress = {
   introCompleted: false,
   missionTimings: {},
   theme: "cyan",
+  completedQuizzes: [],
+  quizScores: {},
+  dailyStreak: 0,
+  lastDailyDate: undefined,
+  completedDailies: [],
 };
 
 export async function getPlayerProgress(): Promise<PlayerProgress> {

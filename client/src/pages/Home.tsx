@@ -19,11 +19,13 @@ import AnimatedBackground from "@/components/AnimatedBackground";
 import IntroSequence from "@/components/IntroSequence";
 import TrainingReport from "@/components/TrainingReport";
 import WhatYouLearned from "@/components/WhatYouLearned";
+import KnowledgeBase from "@/components/KnowledgeBase";
 import { missions } from "@/lib/missions";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import type { Mission, PlayerProgress, GameMode, MissionAttempt, Achievement } from "@shared/schema";
 
-type View = "missions" | "game" | "archives" | "achievements";
+type View = "missions" | "game" | "archives" | "achievements" | "knowledge";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>("missions");
@@ -173,6 +175,27 @@ export default function Home() {
 
   const handleModeChange = (mode: GameMode) => {
     updateMode.mutate(mode);
+  };
+
+  const handleQuizComplete = async (termId: string, score: number) => {
+    try {
+      const response = await fetch("/api/quiz/complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ termId, score })
+      });
+      
+      const data = await response.json();
+      if (data.xpEarned > 0) {
+        toast({
+          title: "Quiz Passed!",
+          description: `+${data.xpEarned} XP earned!`,
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ["/api/progress"] });
+    } catch (error) {
+      console.error("Error completing quiz:", error);
+    }
   };
 
   const handleSubmitReport = async (report: string) => {
@@ -372,6 +395,15 @@ export default function Home() {
       {currentView === "achievements" && (
         <div className="flex-1 overflow-y-auto fade-in">
           <AchievementsList progress={progress} />
+        </div>
+      )}
+
+      {currentView === "knowledge" && progress && (
+        <div className="flex-1 overflow-y-auto fade-in">
+          <KnowledgeBase
+            completedQuizzes={progress.completedQuizzes}
+            onQuizComplete={handleQuizComplete}
+          />
         </div>
       )}
 

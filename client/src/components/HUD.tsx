@@ -1,4 +1,4 @@
-import { Settings, Archive, Trophy, Info, BarChart3 } from "lucide-react";
+import { Settings, Archive, Trophy, Info, BarChart3, BookOpen } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,13 +6,13 @@ import ThemeToggle from "./ThemeToggle";
 import DarkModeToggle from "./DarkModeToggle";
 
 interface HUDProps {
-  currentView: "missions" | "game" | "archives" | "achievements";
+  currentView: "missions" | "game" | "archives" | "achievements" | "knowledge";
   level: number;
   xp: number;
   achievementCount: number;
   codename?: string;
   onSettingsClick: () => void;
-  onNavigate: (view: "missions" | "archives" | "achievements") => void;
+  onNavigate: (view: "missions" | "archives" | "achievements" | "knowledge") => void;
   onShowReport?: () => void;
 }
 
@@ -57,6 +57,16 @@ export default function HUD({
       </div>
 
       <div className="flex items-center gap-2 z-10">
+        <Button
+          size="icon"
+          variant={currentView === "knowledge" ? "default" : "ghost"}
+          onClick={() => onNavigate("knowledge")}
+          data-testid="button-knowledge"
+          className="hover-elevate"
+        >
+          <BookOpen className="w-5 h-5" />
+        </Button>
+
         <Button
           size="icon"
           variant={currentView === "archives" ? "default" : "ghost"}

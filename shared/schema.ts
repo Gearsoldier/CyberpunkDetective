@@ -46,6 +46,11 @@ export interface PlayerProgress {
   introCompleted?: boolean;
   missionTimings: Record<number, number>; // Track time spent on each mission
   theme?: "cyan" | "amber" | "violet";
+  completedQuizzes: string[]; // glossary term IDs
+  quizScores: Record<string, number>; // term id -> score (0-100)
+  dailyStreak: number;
+  lastDailyDate?: string; // YYYY-MM-DD format
+  completedDailies: string[]; // daily case IDs
 }
 
 export interface ToolResult {
