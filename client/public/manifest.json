@@ -1,0 +1,62 @@
+{
+  "name": "GEARZ OSINT Detective",
+  "short_name": "GEARZ OSINT",
+  "description": "Learn OSINT investigation techniques through an immersive cyberpunk detective game. Track the Neon Cross cyber-criminal gang across 25 missions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#3dd9d5",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["education", "games", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Start Mission",
+      "short_name": "Missions",
+      "description": "Jump straight to mission selection",
+      "url": "/?view=missions",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Daily Case",
+      "short_name": "Daily",
+      "description": "Access today's daily challenge",
+      "url": "/?view=daily",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Leaderboard",
+      "short_name": "Ranks",
+      "description": "View global rankings",
+      "url": "/?view=leaderboard",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

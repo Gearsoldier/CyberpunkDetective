@@ -114,7 +114,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Search for related pastes to find the full scope"]
     },
-    minLevel: 2,
+    minLevel: 1,
     xpReward: 200,
     act: 1,
     antagonistId: "data_leech",
@@ -142,7 +142,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Check the ASN for IP range patterns"]
     },
-    minLevel: 3,
+    minLevel: 1,
     xpReward: 250,
     act: 1,
     antagonistId: "shadow_courier",
@@ -170,7 +170,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Compare current DNS with historical records"]
     },
-    minLevel: 3,
+    minLevel: 1,
     xpReward: 250,
     act: 1,
     antagonistId: "signal_jammer",
@@ -198,7 +198,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Look for patterns in timing and infrastructure"]
     },
-    minLevel: 4,
+    minLevel: 1,
     xpReward: 300,
     act: 1,
     antagonistId: "crypto_viper",
@@ -226,7 +226,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Map the organizational structure from subdomain names"]
     },
-    minLevel: 5,
+    minLevel: 1,
     xpReward: 400,
     act: 1,
     antagonistId: "cert_thief",
@@ -261,7 +261,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Identify the DNS chokepoint"]
     },
-    minLevel: 6,
+    minLevel: 1,
     xpReward: 450,
     act: 2,
     antagonistId: "iron_bishop",
@@ -290,7 +290,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Use this knowledge to feed them false information"]
     },
-    minLevel: 7,
+    minLevel: 1,
     xpReward: 500,
     act: 2,
     antagonistId: "crimson_oracle",
@@ -318,7 +318,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Identify the command-and-control window"]
     },
-    minLevel: 8,
+    minLevel: 1,
     xpReward: 500,
     act: 2,
     antagonistId: "mercury_hand",
@@ -347,7 +347,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Time is critical - work backwards from the threat"]
     },
-    minLevel: 9,
+    minLevel: 1,
     xpReward: 600,
     act: 2,
     antagonistId: "void_marshal",
@@ -376,7 +376,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Study the psychological manipulation techniques"]
     },
-    minLevel: 10,
+    minLevel: 1,
     xpReward: 600,
     act: 2,
     antagonistId: "silver_tongue",
@@ -404,7 +404,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Certificate logs will show the full hierarchy"]
     },
-    minLevel: 11,
+    minLevel: 1,
     xpReward: 700,
     act: 2,
     antagonistId: "iron_bishop",
@@ -433,7 +433,7 @@ export const missions: Mission[] = [
       ],
       expert: ["The traitor will have two separate communication channels"]
     },
-    minLevel: 12,
+    minLevel: 1,
     xpReward: 700,
     act: 2,
     antagonistId: "mercury_hand",
@@ -463,7 +463,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Act fast - DNS changes propagate quickly"]
     },
-    minLevel: 13,
+    minLevel: 1,
     xpReward: 800,
     act: 2,
     antagonistId: "iron_bishop",
@@ -492,7 +492,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Use paste sites and media outlets for maximum exposure"]
     },
-    minLevel: 13,
+    minLevel: 1,
     xpReward: 800,
     act: 2,
     antagonistId: "crimson_oracle",
@@ -521,7 +521,7 @@ export const missions: Mission[] = [
       ],
       expert: ["The Shepherd wants you to find him. Question why."]
     },
-    minLevel: 14,
+    minLevel: 1,
     xpReward: 900,
     act: 2,
     narrativeBeat: "The infrastructure is down. The generals are finished. Only the inner circle remains between you and The Shepherd. He's watching. He's waiting. This is what he wanted all along.",
@@ -555,7 +555,7 @@ export const missions: Mission[] = [
       ],
       expert: ["The mole will access files they have no operational need for"]
     },
-    minLevel: 15,
+    minLevel: 1,
     xpReward: 1000,
     act: 3,
     antagonistId: "judas_protocol",
@@ -585,7 +585,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Military-grade doesn't mean perfect - find the human error"]
     },
-    minLevel: 16,
+    minLevel: 1,
     xpReward: 1000,
     act: 3,
     antagonistId: "seven_seals",
@@ -614,7 +614,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Simultaneous action required - they can't rebuild if everything falls at once"]
     },
-    minLevel: 17,
+    minLevel: 1,
     xpReward: 1100,
     act: 3,
     antagonistId: "lazarus_node",
@@ -643,7 +643,7 @@ export const missions: Mission[] = [
       ],
       expert: ["This is a trap. But it's also your only chance."]
     },
-    minLevel: 18,
+    minLevel: 1,
     xpReward: 1200,
     act: 3,
     narrativeBeat: "The inner circle is broken. All that remains is The Shepherd himself. He's been watching your entire investigation. He knows every move you've made. And now he's inviting you to face him. This ends where it began: with a choice.",
@@ -673,7 +673,7 @@ export const missions: Mission[] = [
       ],
       expert: ["Find the weakness - every fortress has one"]
     },
-    minLevel: 19,
+    minLevel: 1,
     xpReward: 1300,
     act: 3,
     antagonistId: "abaddon",
@@ -703,7 +703,7 @@ export const missions: Mission[] = [
       ],
       expert: ["The truth is in what he tells himself, not what he tells others"]
     },
-    minLevel: 20,
+    minLevel: 1,
     xpReward: 1400,
     act: 3,
     antagonistId: "abaddon",
@@ -736,7 +736,7 @@ export const missions: Mission[] = [
       ],
       expert: ["The truth itself is your greatest weapon"]
     },
-    minLevel: 21,
+    minLevel: 1,
     xpReward: 2000,
     act: 3,
     antagonistId: "abaddon",
