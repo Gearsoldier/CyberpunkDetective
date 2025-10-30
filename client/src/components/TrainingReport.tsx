@@ -1,9 +1,10 @@
-import { TrendingUp, Target, Clock, Zap } from "lucide-react";
+import { TrendingUp, Target, Clock, Zap, Award, BarChart3, Trophy } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +19,7 @@ interface TrainingReportProps {
 
 export default function TrainingReport({ open, onClose, progress }: TrainingReportProps) {
   const completedCount = progress.completedMissions?.length || 0;
-  const totalMissions = 15;
+  const totalMissions = 25;
   const completionRate = (completedCount / totalMissions) * 100;
 
   const scores = progress.missionScores || {};
@@ -39,15 +40,22 @@ export default function TrainingReport({ open, onClose, progress }: TrainingRepo
 
   const efficiency = totalAttempts > 0 ? (completedCount / totalAttempts) * 100 : 0;
 
+  const perfectScores = Object.values(scores).filter(score => score >= 95).length;
+  const quizzesPassed = progress.completedQuizzes?.length || 0;
+  const dailyStreak = progress.dailyStreak || 0;
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl glass-strong">
+      <DialogContent className="max-w-3xl glass-strong border-2 border-primary/30 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-orbitron text-2xl">
             <span className="text-primary">TRAINING</span>
             <span className="text-muted-foreground mx-2">//</span>
             <span className="text-accent">REPORT</span>
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Comprehensive performance report and training statistics
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
@@ -91,6 +99,33 @@ export default function TrainingReport({ open, onClose, progress }: TrainingRepo
               <p className="text-2xl font-bold font-orbitron">
                 {efficiency.toFixed(0)}%
               </p>
+            </Card>
+          </div>
+
+          {/* Additional Stats Grid */}
+          <div className="grid grid-cols-3 gap-4">
+            <Card className="p-3 glass">
+              <div className="flex items-center gap-2 mb-1">
+                <Trophy className="w-4 h-4 text-primary" />
+                <p className="text-xs text-muted-foreground font-rajdhani uppercase">Perfect Scores</p>
+              </div>
+              <p className="text-xl font-bold font-orbitron">{perfectScores}</p>
+            </Card>
+
+            <Card className="p-3 glass">
+              <div className="flex items-center gap-2 mb-1">
+                <Award className="w-4 h-4 text-accent" />
+                <p className="text-xs text-muted-foreground font-rajdhani uppercase">Quizzes Passed</p>
+              </div>
+              <p className="text-xl font-bold font-orbitron">{quizzesPassed}</p>
+            </Card>
+
+            <Card className="p-3 glass">
+              <div className="flex items-center gap-2 mb-1">
+                <BarChart3 className="w-4 h-4 text-primary" />
+                <p className="text-xs text-muted-foreground font-rajdhani uppercase">Daily Streak</p>
+              </div>
+              <p className="text-xl font-bold font-orbitron">{dailyStreak}</p>
             </Card>
           </div>
 

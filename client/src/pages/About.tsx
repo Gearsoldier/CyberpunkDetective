@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { ArrowLeft, Github, ExternalLink, Shield, Eye, Zap, Terminal } from "lucide-react";
+import { ArrowLeft, Github, ExternalLink, Shield, Eye, Zap, Terminal, Coffee, Heart, Briefcase } from "lucide-react";
+import { SiLinkedin, SiKofi } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -46,13 +47,16 @@ export default function About() {
             </p>
             <div className="flex flex-wrap justify-center gap-2 pt-4">
               <Badge variant="outline" className="font-mono">
-                v3.0 Cinematic Edition
+                v4.0 Polish Edition
               </Badge>
               <Badge variant="outline" className="font-mono">
-                15 Missions
+                25 Missions
               </Badge>
               <Badge variant="outline" className="font-mono">
                 AI-Powered Grading
+              </Badge>
+              <Badge variant="outline" className="font-mono">
+                PWA Enabled
               </Badge>
             </div>
           </div>
@@ -91,7 +95,7 @@ export default function About() {
             <Card className="border-accent/30 bg-accent/5 hover-elevate">
               <CardHeader>
                 <CardTitle className="font-orbitron flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-accent" />
+                  <Briefcase className="w-5 h-5 text-accent" />
                   Hire the Developer
                 </CardTitle>
               </CardHeader>
@@ -106,10 +110,11 @@ export default function About() {
                   data-testid="button-hire-contra"
                 >
                   <a
-                    href="https://contra.com"
+                    href="https://contra.com/gear_qt74d10m?referralExperimentNid=DEFAULT_REFERRAL_PROGRAM&referrerUsername=gear_qt74d10m&utm_campaign=social_sharing&utm_medium=independent_share&utm_source=copy_link"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
+                    <Briefcase className="w-4 h-4 mr-2" />
                     View on Contra
                     <ExternalLink className="w-4 h-4 ml-2" />
                   </a>
@@ -173,6 +178,71 @@ export default function About() {
             </CardContent>
           </Card>
 
+          {/* Support the Developer */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-orbitron flex items-center gap-2">
+                <Heart className="w-5 h-5 text-primary" />
+                Support the Developer
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Enjoyed the game? Support continued development and help create more educational OSINT content!
+              </p>
+              <div className="grid md:grid-cols-3 gap-3">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="font-rajdhani uppercase tracking-wide border-primary/30"
+                  data-testid="button-kofi"
+                >
+                  <a
+                    href="https://ko-fi.com/gearz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SiKofi className="w-4 h-4 mr-2" />
+                    Ko-fi
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="font-rajdhani uppercase tracking-wide border-accent/30"
+                  data-testid="button-buymeacoffee"
+                >
+                  <a
+                    href="https://buymeacoffee.com/gearz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Coffee className="w-4 h-4 mr-2" />
+                    Buy Me a Coffee
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="font-rajdhani uppercase tracking-wide border-primary/30"
+                  data-testid="button-linkedin"
+                >
+                  <a
+                    href="https://www.linkedin.com/in/joel-suarez-648580288"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SiLinkedin className="w-4 h-4 mr-2" />
+                    LinkedIn
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Credits */}
           <Card>
             <CardHeader>
@@ -182,39 +252,9 @@ export default function About() {
               <p className="text-sm text-muted-foreground">
                 GEARZ OSINT Detective is an educational project designed to teach cybersecurity and OSINT skills through gamification. This project is open source and free to use.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  asChild
-                  variant="outline"
-                  className="font-rajdhani uppercase tracking-wide"
-                  data-testid="button-github"
-                >
-                  <a
-                    href="https://github.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github className="w-4 h-4 mr-2" />
-                    View Source Code
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="font-rajdhani uppercase tracking-wide"
-                  data-testid="button-report-issue"
-                >
-                  <a
-                    href="https://github.com/issues"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Report an Issue
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </a>
-                </Button>
-              </div>
+              <p className="text-sm text-muted-foreground">
+                Developed by Joel Suarez - Full Stack Developer specializing in cybersecurity education, interactive web applications, and gamification.
+              </p>
             </CardContent>
           </Card>
 
