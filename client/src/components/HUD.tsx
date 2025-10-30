@@ -1,7 +1,11 @@
-import { Settings, Archive, Trophy, Info, BarChart3, BookOpen, Calendar, Users, User, Lock } from "lucide-react";
-import { Link } from "wouter";
+import { Settings, Archive, Trophy, Info, BarChart3, BookOpen, Calendar, Users, User, Lock, LogOut } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/lib/auth";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import ThemeToggle from "./ThemeToggle";
 import DarkModeToggle from "./DarkModeToggle";
 
@@ -26,6 +30,31 @@ export default function HUD({
   onNavigate,
   onShowReport
 }: HUDProps) {
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const [, setLocation] = useLocation();
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/auth/logout", {});
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.clear();
+      toast({
+        title: "Logged out",
+        description: "See you next time, detective",
+      });
+      setLocation("/auth");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Logout failed",
+        description: error.message || "Could not log out",
+        variant: "destructive",
+      });
+    },
+  });
   return (
     <div className="h-14 border-b-2 border-primary/30 glass-strong flex items-center justify-between px-4 relative overflow-hidden neon-glow">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5 pointer-events-none" />
@@ -42,6 +71,11 @@ export default function HUD({
         </button>
         
         <div className="hidden md:flex items-center gap-2">
+          {user && (
+            <Badge variant="outline" className="font-mono text-xs bg-accent/10" data-testid="badge-username">
+              @{user.username}
+            </Badge>
+          )}
           {codename && (
             <Badge variant="outline" className="font-mono text-xs bg-accent/10" data-testid="badge-codename">
               {codename}
@@ -176,6 +210,17 @@ export default function HUD({
           className="hover-elevate"
         >
           <Settings className="w-5 h-5" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => logoutMutation.mutate()}
+          disabled={logoutMutation.isPending}
+          data-testid="button-logout"
+          className="hover-elevate"
+        >
+          <LogOut className="w-5 h-5" />
         </Button>
       </div>
     </div>
