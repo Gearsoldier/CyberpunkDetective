@@ -309,6 +309,8 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col bg-background relative transition-smooth">
       <AnimatedBackground />
+      <DataStream />
+      <HackingAnimation isActive={isSubmitting} />
 
       <HUD
         currentView={currentView}
@@ -473,9 +475,6 @@ export default function Home() {
           />
         </div>
       )}
-
-      <DataStream />
-      <HackingAnimation isActive={isSubmitting} />
 
       {progress && (
         <TrainingReport
