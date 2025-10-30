@@ -184,26 +184,36 @@ export class PostgresStorage implements IStorage {
   }
 
   // Leaderboard
-  async getLeaderboard(limit: number = 100): Promise<Array<{ username: string; xp: number; level: number; completedMissions: number; rank: number }>> {
+  async getLeaderboard(limit: number = 100): Promise<Array<{ username: string; xp: number; level: number; completedMissions: number; accuracy: number; rank: number }>> {
     const results = await db
       .select({
         username: users.username,
         xp: playerProgress.xp,
         level: playerProgress.level,
         completedMissions: playerProgress.completedMissions,
+        missionScores: playerProgress.missionScores,
       })
       .from(playerProgress)
       .innerJoin(users, eq(playerProgress.userId, users.id))
       .orderBy(desc(playerProgress.xp), desc(playerProgress.level))
       .limit(limit);
 
-    return results.map((row, index) => ({
-      username: row.username,
-      xp: row.xp,
-      level: row.level,
-      completedMissions: (row.completedMissions as number[]).length,
-      rank: index + 1,
-    }));
+    return results.map((row, index) => {
+      const missions = row.completedMissions as number[];
+      const scores = row.missionScores as Record<number, number>;
+      const accuracy = missions.length > 0
+        ? Math.round(Object.values(scores).reduce((sum, s) => sum + s, 0) / missions.length)
+        : 0;
+
+      return {
+        username: row.username,
+        xp: row.xp,
+        level: row.level,
+        completedMissions: missions.length,
+        accuracy,
+        rank: index + 1,
+      };
+    });
   }
 
   async getUserRank(userId: number): Promise<number> {

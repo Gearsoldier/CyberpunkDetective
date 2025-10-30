@@ -8,11 +8,11 @@ import type { PlayerProgress } from "@shared/schema";
 
 interface LeaderboardEntry {
   rank: number;
-  codename: string;
+  username: string;
   level: number;
   xp: number;
   accuracy: number;
-  missionsCompleted: number;
+  completedMissions: number;
 }
 
 interface LeaderboardData {
@@ -32,9 +32,9 @@ export default function Leaderboard() {
 
     const shareText = `GEARZ OSINT Detective Stats
 
-Codename: ${playerEntry.codename}
+Username: ${playerEntry.username}
 Level: ${playerEntry.level}
-Missions: ${playerEntry.missionsCompleted}
+Missions: ${playerEntry.completedMissions}
 Accuracy: ${playerEntry.accuracy}%
 
 Think you can beat me? https://gearz-osint.replit.app`;
@@ -105,7 +105,7 @@ Think you can beat me? https://gearz-osint.replit.app`;
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <div className="text-3xl font-bold">{playerEntry.missionsCompleted}</div>
+                <div className="text-3xl font-bold">{playerEntry.completedMissions}</div>
                 <div className="text-sm text-muted-foreground mt-1">Missions</div>
               </div>
             </CardContent>
@@ -145,7 +145,7 @@ Think you can beat me? https://gearz-osint.replit.app`;
           <div className="space-y-3">
             {data?.leaderboard.map((entry) => (
               <div
-                key={entry.codename}
+                key={entry.username}
                 className={`flex items-center gap-4 p-4 rounded-lg border ${
                   entry.rank === 1 
                     ? 'bg-gradient-to-r from-yellow-500/10 to-transparent border-yellow-500/30' 
@@ -168,10 +168,10 @@ Think you can beat me? https://gearz-osint.replit.app`;
                   )}
                 </div>
 
-                {/* Codename & Level */}
+                {/* Username & Level */}
                 <div className="flex-1">
                   <div className="font-semibold flex items-center gap-2">
-                    {entry.codename}
+                    {entry.username}
                     {entry.rank <= 3 && (
                       <Badge variant="outline" className="text-xs">
                         Top {entry.rank}
@@ -187,7 +187,7 @@ Think you can beat me? https://gearz-osint.replit.app`;
                 <div className="hidden md:flex items-center gap-6 text-sm">
                   <div className="flex items-center gap-1 text-muted-foreground">
                     <Target className="w-4 h-4" />
-                    <span>{entry.missionsCompleted}</span>
+                    <span>{entry.completedMissions}</span>
                   </div>
                   <div className="flex items-center gap-1 text-green-500">
                     <Award className="w-4 h-4" />
