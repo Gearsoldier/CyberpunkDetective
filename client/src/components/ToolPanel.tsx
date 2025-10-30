@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Globe, Image, FileCode, ChevronRight } from "lucide-react";
+import { Search, Globe, Image, FileCode, ChevronRight, Shield, Database } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,12 @@ export default function ToolPanel({ availableTools }: ToolPanelProps) {
   
   const [pasteQuery, setPasteQuery] = useState("");
   const [pasteResult, setPasteResult] = useState<any>(null);
+  
+  const [certQuery, setCertQuery] = useState("");
+  const [certResult, setCertResult] = useState<any>(null);
+  
+  const [breachQuery, setBreachQuery] = useState("");
+  const [breachResult, setBreachResult] = useState<any>(null);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -53,19 +59,52 @@ export default function ToolPanel({ availableTools }: ToolPanelProps) {
     }
   };
 
-  const toolIcons = {
+  const handleCert = () => {
+    if (certQuery.trim()) {
+      // Certificate transparency logs
+      const result = {
+        domain: certQuery,
+        subdomains: [`www.${certQuery}`, `mail.${certQuery}`, `api.${certQuery}`, `admin.${certQuery}`],
+        certificates_found: 4,
+        issuer: "Let's Encrypt Authority X3",
+        validity: "Valid"
+      };
+      setCertResult(result);
+    }
+  };
+
+  const handleBreach = () => {
+    if (breachQuery.trim()) {
+      // Breach database search
+      const result = {
+        query: breachQuery,
+        breaches_found: ["MegaCorp 2023", "TechData Leak 2022"],
+        compromised_accounts: 12,
+        data_types: ["emails", "passwords", "phone_numbers"],
+        risk_level: "High"
+      };
+      setBreachResult(result);
+    }
+  };
+
+  const toolIcons: Record<ToolType, any> = {
     search: Search,
     whois: Globe,
     metadata: Image,
     pastebin: FileCode,
+    cert: Shield,
+    breach: Database,
+    linkedin: Globe,
+    dns: Globe,
+    email: FileCode,
   };
 
   return (
     <Card className="p-4 border-2 border-primary/30 h-full flex flex-col">
       <Tabs defaultValue={availableTools[0]} className="flex-1 flex flex-col">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-4">
+        <TabsList className={`grid w-full mb-4 ${availableTools.length <= 4 ? 'grid-cols-' + availableTools.length : 'grid-cols-2 md:grid-cols-4'}`}>
           {availableTools.map((tool) => {
-            const Icon = toolIcons[tool];
+            const Icon = toolIcons[tool] || Search;
             return (
               <TabsTrigger
                 key={tool}
@@ -235,6 +274,102 @@ export default function ToolPanel({ availableTools }: ToolPanelProps) {
                     </pre>
                   </div>
                 )}
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="cert" className="space-y-3 mt-0">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold font-rajdhani uppercase tracking-wide">
+                Certificate Transparency Logs
+              </label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="example.com"
+                  value={certQuery}
+                  onChange={(e) => setCertQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleCert()}
+                  className="font-mono text-sm"
+                  data-testid="input-cert"
+                />
+                <Button onClick={handleCert} data-testid="button-cert">
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            {certResult && (
+              <Card className="p-4 bg-muted/30" data-testid="card-cert-result">
+                <div className="font-mono text-xs space-y-2">
+                  <div className="flex">
+                    <span className="text-muted-foreground min-w-[120px]">Domain:</span>
+                    <span>{certResult.domain}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Subdomains:</span>
+                    {certResult.subdomains.map((sub: string, i: number) => (
+                      <div key={i} className="pl-4 text-primary">• {sub}</div>
+                    ))}
+                  </div>
+                  <div className="flex">
+                    <span className="text-muted-foreground min-w-[120px]">Certificates:</span>
+                    <span>{certResult.certificates_found}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="text-muted-foreground min-w-[120px]">Issuer:</span>
+                    <span>{certResult.issuer}</span>
+                  </div>
+                </div>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="breach" className="space-y-3 mt-0">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold font-rajdhani uppercase tracking-wide">
+                Breach Database Search
+              </label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="email or domain"
+                  value={breachQuery}
+                  onChange={(e) => setBreachQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleBreach()}
+                  className="font-mono text-sm"
+                  data-testid="input-breach"
+                />
+                <Button onClick={handleBreach} data-testid="button-breach">
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            {breachResult && (
+              <Card className="p-4 bg-muted/30" data-testid="card-breach-result">
+                <div className="font-mono text-xs space-y-2">
+                  <div className="flex">
+                    <span className="text-muted-foreground min-w-[120px]">Query:</span>
+                    <span>{breachResult.query}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Breaches:</span>
+                    {breachResult.breaches_found.map((breach: string, i: number) => (
+                      <div key={i} className="pl-4 text-destructive">• {breach}</div>
+                    ))}
+                  </div>
+                  <div className="flex">
+                    <span className="text-muted-foreground min-w-[120px]">Compromised:</span>
+                    <span>{breachResult.compromised_accounts}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="text-muted-foreground min-w-[120px]">Data Types:</span>
+                    <span>{breachResult.data_types.join(', ')}</span>
+                  </div>
+                  <div className="flex">
+                    <span className="text-muted-foreground min-w-[120px]">Risk:</span>
+                    <span className="text-destructive font-bold">{breachResult.risk_level}</span>
+                  </div>
+                </div>
               </Card>
             )}
           </TabsContent>

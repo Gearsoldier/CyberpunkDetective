@@ -20,12 +20,14 @@ import IntroSequence from "@/components/IntroSequence";
 import TrainingReport from "@/components/TrainingReport";
 import WhatYouLearned from "@/components/WhatYouLearned";
 import KnowledgeBase from "@/components/KnowledgeBase";
+import DailyCases from "@/components/DailyCases";
+import Leaderboard from "@/components/Leaderboard";
 import { missions } from "@/lib/missions";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Mission, PlayerProgress, GameMode, MissionAttempt, Achievement } from "@shared/schema";
 
-type View = "missions" | "game" | "archives" | "achievements" | "knowledge";
+type View = "missions" | "game" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>("missions");
@@ -404,6 +406,21 @@ export default function Home() {
             completedQuizzes={progress.completedQuizzes}
             onQuizComplete={handleQuizComplete}
           />
+        </div>
+      )}
+
+      {currentView === "daily" && progress && (
+        <div className="flex-1 overflow-y-auto fade-in">
+          <DailyCases
+            currentStreak={progress.dailyStreak}
+            onStartCase={handleSelectMission}
+          />
+        </div>
+      )}
+
+      {currentView === "leaderboard" && (
+        <div className="flex-1 overflow-y-auto fade-in">
+          <Leaderboard />
         </div>
       )}
 

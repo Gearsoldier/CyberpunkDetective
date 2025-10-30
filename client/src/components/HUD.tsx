@@ -1,4 +1,4 @@
-import { Settings, Archive, Trophy, Info, BarChart3, BookOpen } from "lucide-react";
+import { Settings, Archive, Trophy, Info, BarChart3, BookOpen, Calendar, Users } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,13 +6,13 @@ import ThemeToggle from "./ThemeToggle";
 import DarkModeToggle from "./DarkModeToggle";
 
 interface HUDProps {
-  currentView: "missions" | "game" | "archives" | "achievements" | "knowledge";
+  currentView: "missions" | "game" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard";
   level: number;
   xp: number;
   achievementCount: number;
   codename?: string;
   onSettingsClick: () => void;
-  onNavigate: (view: "missions" | "archives" | "achievements" | "knowledge") => void;
+  onNavigate: (view: "missions" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard") => void;
   onShowReport?: () => void;
 }
 
@@ -57,6 +57,26 @@ export default function HUD({
       </div>
 
       <div className="flex items-center gap-2 z-10">
+        <Button
+          size="icon"
+          variant={currentView === "daily" ? "default" : "ghost"}
+          onClick={() => onNavigate("daily")}
+          data-testid="button-daily"
+          className="hover-elevate"
+        >
+          <Calendar className="w-5 h-5" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant={currentView === "leaderboard" ? "default" : "ghost"}
+          onClick={() => onNavigate("leaderboard")}
+          data-testid="button-leaderboard"
+          className="hover-elevate"
+        >
+          <Users className="w-5 h-5" />
+        </Button>
+
         <Button
           size="icon"
           variant={currentView === "knowledge" ? "default" : "ghost"}
