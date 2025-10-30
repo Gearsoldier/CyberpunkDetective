@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -100,6 +101,9 @@ Real-world applications include correlating multiple data sources, maintaining o
               </p>
             </div>
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Mission feedback and performance assessment from your AI mentor
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
