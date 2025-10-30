@@ -35,16 +35,32 @@ export default function About() {
         {/* Main Content */}
         <main className="container max-w-4xl mx-auto px-4 py-12 space-y-12">
           {/* Hero Section */}
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-6">
             <div className="flex items-center justify-center gap-3">
-              <Shield className="w-16 h-16 text-primary" />
-              <h2 className="font-orbitron text-4xl md:text-5xl font-bold">
+              <Shield className="w-16 h-16 text-primary animate-pulse" />
+              <h2 className="font-orbitron text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-primary">
                 GEARZ OSINT Detective
               </h2>
             </div>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              A cinematic cyberpunk educational game teaching Open Source Intelligence skills through interactive missions
+            <p className="text-xl font-rajdhani max-w-2xl mx-auto leading-relaxed">
+              <span className="text-primary font-bold">Hunt cyber criminals.</span>{" "}
+              <span className="text-accent font-bold">Expose their secrets.</span>{" "}
+              <span className="text-foreground">Master the art of digital investigation through 25 hardcore OSINT missions.</span>
             </p>
+            
+            {/* Epic Bible Quote */}
+            <Card className="max-w-3xl mx-auto bg-gradient-to-br from-primary/5 via-background to-accent/5 border-2 border-primary/30">
+              <CardContent className="py-6">
+                <blockquote className="space-y-3">
+                  <p className="text-lg md:text-xl font-rajdhani italic text-foreground leading-relaxed">
+                    "Nothing is hidden that will not be made known, nor secret that will not come to light."
+                  </p>
+                  <footer className="text-sm text-primary font-orbitron uppercase tracking-wider">
+                    — Luke 8:17
+                  </footer>
+                </blockquote>
+              </CardContent>
+            </Card>
             <div className="flex flex-wrap justify-center gap-2 pt-4">
               <Badge variant="outline" className="font-mono">
                 v4.0 Polish Edition
@@ -72,7 +88,7 @@ export default function About() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  Experience the full game instantly in your browser. No downloads, no setup required. Learn OSINT techniques through hands-on missions.
+                  Track the notorious Neon Cross cyber-criminal gang across 25 immersive missions. Master Google dorking, WHOIS reconnaissance, metadata forensics, and advanced threat hunting. No downloads, no setup—just pure detective work.
                 </p>
                 <Button
                   asChild
@@ -101,7 +117,7 @@ export default function About() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  Need a full-stack developer for your project? From cybersecurity tools to interactive web apps, let's build something amazing together.
+                  Need a developer who builds badass cybersecurity tools and immersive web experiences? Specializing in full-stack development, gamification, and educational platforms. Let's build something legendary.
                 </p>
                 <Button
                   asChild
@@ -166,14 +182,16 @@ export default function About() {
                 <Badge variant="secondary">React</Badge>
                 <Badge variant="secondary">TypeScript</Badge>
                 <Badge variant="secondary">Express</Badge>
-                <Badge variant="secondary">In-Memory Storage</Badge>
+                <Badge variant="secondary">PostgreSQL</Badge>
+                <Badge variant="secondary">Drizzle ORM</Badge>
+                <Badge variant="secondary">Session Auth</Badge>
                 <Badge variant="secondary">TanStack Query</Badge>
                 <Badge variant="secondary">Tailwind CSS</Badge>
                 <Badge variant="secondary">Shadcn UI</Badge>
                 <Badge variant="secondary">PWA</Badge>
               </div>
               <p className="text-sm text-muted-foreground mt-4">
-                Server-side scoring validation ensures fair gameplay. All progress is automatically saved in-memory with optimistic UI updates for instant responsiveness.
+                Built with session-based authentication and PostgreSQL for persistent progress tracking. Server-side scoring validation ensures fair gameplay. Your detective work is saved across sessions—pick up where you left off and climb the global leaderboard.
               </p>
             </CardContent>
           </Card>
@@ -250,10 +268,10 @@ export default function About() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                GEARZ OSINT Detective is an educational project designed to teach cybersecurity and OSINT skills through gamification. This project is open source and free to use.
+                GEARZ OSINT Detective is a cyberpunk educational experience designed to transform curious minds into skilled digital investigators. Learn real-world threat hunting techniques used by cybersecurity professionals—completely free and open source.
               </p>
               <p className="text-sm text-muted-foreground">
-                Developed by Joel Suarez - Full Stack Developer specializing in cybersecurity education, interactive web applications, and gamification.
+                Forged by <span className="text-primary font-semibold">Joel Suarez</span> - Full Stack Developer specializing in cybersecurity education, interactive web applications, and gamification. Building tools that make learning badass.
               </p>
             </CardContent>
           </Card>

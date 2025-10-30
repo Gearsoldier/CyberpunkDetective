@@ -194,36 +194,83 @@ export default function AnalyticsDashboard({ progress, missions }: AnalyticsDash
       </Card>
 
       {/* Learning Curve */}
-      <Card className="p-6 border-2 border-primary/30">
-        <h3 className="font-rajdhani text-lg font-semibold uppercase mb-4 flex items-center gap-2">
+      <Card className="p-6 border-2 border-primary/30 bg-gradient-to-br from-background via-background to-primary/5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-primary/5 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
+        <h3 className="font-rajdhani text-lg font-semibold uppercase mb-4 flex items-center gap-2 relative z-10">
           <TrendingUp className="w-5 h-5 text-primary" />
           Learning Curve
         </h3>
-        <div className="h-48 flex items-end gap-2">
+        <div className="h-64 flex items-end gap-3 px-2 relative z-10">
           {progress.completedMissions.slice(0, 10).map((missionId, index) => {
             const score = progress.missionScores[missionId] || 0;
             const height = (score / 100) * 100;
+            const isExcellent = score >= 90;
+            const isGood = score >= 70;
             
             return (
               <div 
                 key={missionId}
-                className="flex-1 bg-primary/20 rounded-t relative group cursor-pointer hover-elevate"
-                style={{ height: `${height}%`, minHeight: '10%' }}
+                className="flex-1 relative group cursor-pointer"
                 data-testid={`bar-mission-${missionId}`}
               >
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Badge variant="outline" className="text-xs whitespace-nowrap">
-                    M{missionId}: {score}%
+                <div 
+                  className={`relative rounded-t-lg transition-all duration-300 ${
+                    isExcellent 
+                      ? 'bg-gradient-to-t from-green-500/60 via-green-400/40 to-green-300/20 border-t-2 border-green-400 shadow-lg shadow-green-500/20' 
+                      : isGood 
+                      ? 'bg-gradient-to-t from-primary/60 via-primary/40 to-primary/20 border-t-2 border-primary shadow-lg shadow-primary/20'
+                      : 'bg-gradient-to-t from-accent/60 via-accent/40 to-accent/20 border-t-2 border-accent shadow-lg shadow-accent/20'
+                  } hover:scale-105 hover:shadow-2xl`}
+                  style={{ height: `${Math.max(height, 10)}%` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent rounded-t-lg" />
+                  {isExcellent && (
+                    <div className="absolute inset-0 animate-pulse bg-green-400/10 rounded-t-lg" />
+                  )}
+                </div>
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200 z-20">
+                  <Badge 
+                    variant="outline" 
+                    className={`text-xs whitespace-nowrap font-mono shadow-lg ${
+                      isExcellent ? 'bg-green-500/10 border-green-500' : 
+                      isGood ? 'bg-primary/10 border-primary' : 
+                      'bg-accent/10 border-accent'
+                    }`}
+                  >
+                    Mission {missionId}: {score}%
                   </Badge>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/50 to-transparent rounded-t" />
+                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-muted-foreground font-mono">
+                  {index + 1}
+                </div>
               </div>
             );
           })}
         </div>
-        <div className="mt-4 flex justify-between text-xs text-muted-foreground font-mono">
-          <span>First Mission</span>
-          <span>Recent Missions</span>
+        <div className="mt-10 pt-4 border-t border-primary/20 flex justify-between items-center text-xs text-muted-foreground font-mono relative z-10">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span>First Mission</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>Recent Missions</span>
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+          </div>
+        </div>
+        <div className="mt-4 flex gap-4 text-xs font-mono relative z-10">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded bg-gradient-to-t from-green-500/60 to-green-300/20 border border-green-400" />
+            <span className="text-muted-foreground">90%+ Excellence</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded bg-gradient-to-t from-primary/60 to-primary/20 border border-primary" />
+            <span className="text-muted-foreground">70%+ Proficient</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded bg-gradient-to-t from-accent/60 to-accent/20 border border-accent" />
+            <span className="text-muted-foreground">&lt;70% Training</span>
+          </div>
         </div>
       </Card>
     </div>
