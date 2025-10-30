@@ -166,14 +166,14 @@ export default function About() {
                 <Badge variant="secondary">React</Badge>
                 <Badge variant="secondary">TypeScript</Badge>
                 <Badge variant="secondary">Express</Badge>
-                <Badge variant="secondary">Replit DB</Badge>
+                <Badge variant="secondary">In-Memory Storage</Badge>
                 <Badge variant="secondary">TanStack Query</Badge>
                 <Badge variant="secondary">Tailwind CSS</Badge>
                 <Badge variant="secondary">Shadcn UI</Badge>
-                <Badge variant="secondary">Framer Motion</Badge>
+                <Badge variant="secondary">PWA</Badge>
               </div>
               <p className="text-sm text-muted-foreground mt-4">
-                Server-side scoring validation ensures fair gameplay. All progress is automatically saved to Replit Database with optimistic UI updates for instant responsiveness.
+                Server-side scoring validation ensures fair gameplay. All progress is automatically saved in-memory with optimistic UI updates for instant responsiveness.
               </p>
             </CardContent>
           </Card>

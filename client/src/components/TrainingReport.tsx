@@ -67,7 +67,7 @@ export default function TrainingReport({ open, onClose, progress }: TrainingRepo
                 <p className="text-xs text-muted-foreground font-rajdhani uppercase">Accuracy</p>
               </div>
               <p className="text-2xl font-bold font-orbitron">
-                {averageScore.toFixed(0)}%
+                {Math.min(averageScore, 100).toFixed(0)}%
               </p>
             </Card>
 
@@ -87,7 +87,7 @@ export default function TrainingReport({ open, onClose, progress }: TrainingRepo
                 <p className="text-xs text-muted-foreground font-rajdhani uppercase">Total XP</p>
               </div>
               <p className="text-2xl font-bold font-orbitron">
-                {progress.xp.toLocaleString()}
+                {(progress.xp || 0).toLocaleString()}
               </p>
             </Card>
 
@@ -163,7 +163,7 @@ export default function TrainingReport({ open, onClose, progress }: TrainingRepo
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Achievements Unlocked:</span>
-                <span className="font-mono">{progress.achievements.length}</span>
+                <span className="font-mono">{progress.achievements?.length || 0}</span>
               </div>
             </div>
           </Card>
@@ -182,9 +182,9 @@ export default function TrainingReport({ open, onClose, progress }: TrainingRepo
               <div>
                 <div className="flex justify-between text-xs mb-1">
                   <span className="text-muted-foreground">Technical Analysis</span>
-                  <span className="font-mono">{averageScore.toFixed(0)}%</span>
+                  <span className="font-mono">{Math.min(averageScore, 100).toFixed(0)}%</span>
                 </div>
-                <Progress value={averageScore} className="h-1.5" />
+                <Progress value={Math.min(averageScore, 100)} className="h-1.5" />
               </div>
               <div>
                 <div className="flex justify-between text-xs mb-1">
