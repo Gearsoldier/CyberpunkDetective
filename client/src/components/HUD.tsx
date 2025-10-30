@@ -1,4 +1,4 @@
-import { Settings, Archive, Trophy, Info, BarChart3, BookOpen, Calendar, Users } from "lucide-react";
+import { Settings, Archive, Trophy, Info, BarChart3, BookOpen, Calendar, Users, User, Lock } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,13 +6,13 @@ import ThemeToggle from "./ThemeToggle";
 import DarkModeToggle from "./DarkModeToggle";
 
 interface HUDProps {
-  currentView: "missions" | "game" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard";
+  currentView: "missions" | "game" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard" | "profile" | "analytics" | "unlockables";
   level: number;
   xp: number;
   achievementCount: number;
   codename?: string;
   onSettingsClick: () => void;
-  onNavigate: (view: "missions" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard") => void;
+  onNavigate: (view: "missions" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard" | "profile" | "analytics" | "unlockables") => void;
   onShowReport?: () => void;
 }
 
@@ -111,6 +111,36 @@ export default function HUD({
             </Badge>
           )}
         </Button>
+
+        <Button
+          size="icon"
+          variant={currentView === "analytics" ? "default" : "ghost"}
+          onClick={() => onNavigate("analytics")}
+          data-testid="button-analytics"
+          className="hover-elevate"
+        >
+          <BarChart3 className="w-5 h-5" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant={currentView === "unlockables" ? "default" : "ghost"}
+          onClick={() => onNavigate("unlockables")}
+          data-testid="button-unlockables"
+          className="hover-elevate"
+        >
+          <Lock className="w-5 h-5" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant={currentView === "profile" ? "default" : "ghost"}
+          onClick={() => onNavigate("profile")}
+          data-testid="button-profile"
+          className="hover-elevate"
+        >
+          <User className="w-5 h-5" />
+        </Button>
         
         {onShowReport && (
           <Button
@@ -120,7 +150,7 @@ export default function HUD({
             data-testid="button-training-report"
             className="hover-elevate"
           >
-            <BarChart3 className="w-5 h-5" />
+            <Info className="w-5 h-5" />
           </Button>
         )}
 

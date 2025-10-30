@@ -22,12 +22,17 @@ import WhatYouLearned from "@/components/WhatYouLearned";
 import KnowledgeBase from "@/components/KnowledgeBase";
 import DailyCases from "@/components/DailyCases";
 import Leaderboard from "@/components/Leaderboard";
+import ProfileCustomization from "@/components/ProfileCustomization";
+import AnalyticsDashboard from "@/components/AnalyticsDashboard";
+import UnlockableContent from "@/components/UnlockableContent";
+import { DataStream, HackingAnimation } from "@/components/VisualEffects";
+import { soundManager } from "@/lib/sounds";
 import { missions } from "@/lib/missions";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Mission, PlayerProgress, GameMode, MissionAttempt, Achievement } from "@shared/schema";
 
-type View = "missions" | "game" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard";
+type View = "missions" | "game" | "archives" | "achievements" | "knowledge" | "daily" | "leaderboard" | "profile" | "analytics" | "unlockables";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>("missions");
@@ -168,6 +173,7 @@ export default function Home() {
   };
 
   const handleNavigate = (view: View) => {
+    soundManager.playClick();
     setCurrentView(view);
     if (view !== "game") {
       setCurrentMission(null);
@@ -204,6 +210,7 @@ export default function Home() {
     if (!currentMission || !progress) return;
 
     setIsSubmitting(true);
+    soundManager.playDataProcess();
 
     const attempt: MissionAttempt = {
       missionId: currentMission.id,
@@ -218,6 +225,15 @@ export default function Home() {
       // Generate feedback based on server-computed score
       const score = result.score || 0;
       const feedback = `Your investigation of "${currentMission.title}" shows ${score >= 80 ? 'excellent' : score >= 60 ? 'good' : 'developing'} understanding of OSINT techniques. ${score >= 80 ? 'You correctly identified key indicators and presented your findings clearly.' : score >= 60 ? 'Consider providing more specific details and cross-referencing your sources.' : 'Review the mission brief and hints for guidance on what to investigate.'}`;
+
+      // Play sound effects
+      soundManager.playMissionComplete(score >= 60);
+      if (result.levelUp) {
+        soundManager.playLevelUp();
+      }
+      if (result.newAchievements && result.newAchievements.length > 0) {
+        soundManager.playAchievement();
+      }
 
       setMentorData({
         score,
@@ -423,6 +439,43 @@ export default function Home() {
           <Leaderboard />
         </div>
       )}
+
+      {currentView === "profile" && progress && (
+        <div className="flex-1 overflow-y-auto fade-in">
+          <div className="max-w-3xl mx-auto p-6">
+            <ProfileCustomization
+              onSave={(profile) => {
+                localStorage.setItem('player_profile', JSON.stringify(profile));
+                soundManager.playClick();
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {currentView === "analytics" && progress && (
+        <div className="flex-1 overflow-y-auto fade-in">
+          <AnalyticsDashboard progress={progress} missions={missions} />
+        </div>
+      )}
+
+      {currentView === "unlockables" && progress && (
+        <div className="flex-1 overflow-y-auto fade-in">
+          <UnlockableContent
+            progress={progress}
+            onUnlock={(itemId) => {
+              soundManager.playAchievement();
+              toast({
+                title: "Content Unlocked!",
+                description: "New feature activated successfully."
+              });
+            }}
+          />
+        </div>
+      )}
+
+      <DataStream />
+      <HackingAnimation isActive={isSubmitting} />
 
       {progress && (
         <TrainingReport
