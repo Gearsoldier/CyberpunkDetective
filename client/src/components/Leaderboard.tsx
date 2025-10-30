@@ -30,7 +30,7 @@ export default function Leaderboard() {
     const playerEntry = data?.leaderboard[0];
     if (!playerEntry) return;
 
-    const shareText = `GEARZ OSINT Detective Stats 🔍
+    const shareText = `GEARZ OSINT Detective Stats
 
 Codename: ${playerEntry.codename}
 Level: ${playerEntry.level}
