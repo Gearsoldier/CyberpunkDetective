@@ -1,5 +1,9 @@
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
+import { Pool } from "@neondatabase/serverless";
 import { registerRoutes } from "./routes";
+import { registerAuthRoutes } from "./authRoutes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
@@ -9,6 +13,26 @@ declare module 'http' {
     rawBody: unknown
   }
 }
+
+const pgPool = new Pool({ connectionString: process.env.DATABASE_URL! });
+const PgStore = connectPg(session);
+
+app.use(session({
+  store: new PgStore({
+    pool: pgPool,
+    createTableIfMissing: true,
+  }),
+  secret: process.env.SESSION_SECRET!,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  },
+}));
+
 app.use(express.json({
   verify: (req, _res, buf) => {
     req.rawBody = buf;
@@ -47,6 +71,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  registerAuthRoutes(app);
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
