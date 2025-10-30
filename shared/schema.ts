@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { pgTable, serial, varchar, integer, boolean, timestamp, json, text, index } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { sql } from "drizzle-orm";
 
 export const toolTypes = ["search", "whois", "metadata", "pastebin", "linkedin", "dns", "email", "cert", "breach"] as const;
 export type ToolType = typeof toolTypes[number];
@@ -23,10 +26,10 @@ export interface Mission {
   };
   minLevel: number;
   xpReward: number;
-  act?: number; // Story act (1-3)
-  antagonistId?: string; // Reference to gang member
-  narrativeBeat?: string; // Story progression text
-  scriptureHint?: string; // Optional biblical reference
+  act?: number;
+  antagonistId?: string;
+  narrativeBeat?: string;
+  scriptureHint?: string;
 }
 
 export interface Achievement {
@@ -48,14 +51,14 @@ export interface PlayerProgress {
   mode: GameMode;
   codename?: string;
   introCompleted?: boolean;
-  missionTimings: Record<number, number>; // Track time spent on each mission
+  missionTimings: Record<number, number>;
   theme?: "cyan" | "amber" | "violet";
-  completedQuizzes: string[]; // glossary term IDs
-  quizScores: Record<string, number>; // term id -> score (0-100)
+  completedQuizzes: string[];
+  quizScores: Record<string, number>;
   dailyStreak: number;
-  lastDailyDate?: string; // YYYY-MM-DD format
-  completedDailies: string[]; // daily case IDs
-  aiInstructor: boolean; // Enable AI-powered grading
+  lastDailyDate?: string;
+  completedDailies: string[];
+  aiInstructor: boolean;
 }
 
 export interface ToolResult {
@@ -70,6 +73,66 @@ export interface MissionAttempt {
   timeElapsed: number;
   timestamp: number;
 }
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  username: varchar("username", { length: 50 }).notNull().unique(),
+  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  lastLogin: timestamp("last_login"),
+}, (table) => ({
+  emailIdx: index("email_idx").on(table.email),
+  usernameIdx: index("username_idx").on(table.username),
+}));
+
+export const playerProgress = pgTable("player_progress", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id).unique(),
+  xp: integer("xp").default(0).notNull(),
+  level: integer("level").default(1).notNull(),
+  completedMissions: json("completed_missions").$type<number[]>().default([]).notNull(),
+  achievements: json("achievements").$type<string[]>().default([]).notNull(),
+  missionScores: json("mission_scores").$type<Record<number, number>>().default({}).notNull(),
+  missionAttempts: json("mission_attempts").$type<Record<number, number>>().default({}).notNull(),
+  totalPlayTime: integer("total_play_time").default(0).notNull(),
+  mode: varchar("mode", { length: 20 }).$type<GameMode>().default("beginner").notNull(),
+  codename: varchar("codename", { length: 50 }),
+  introCompleted: boolean("intro_completed").default(false).notNull(),
+  missionTimings: json("mission_timings").$type<Record<number, number>>().default({}).notNull(),
+  theme: varchar("theme", { length: 20 }).$type<"cyan" | "amber" | "violet">(),
+  completedQuizzes: json("completed_quizzes").$type<string[]>().default([]).notNull(),
+  quizScores: json("quiz_scores").$type<Record<string, number>>().default({}).notNull(),
+  dailyStreak: integer("daily_streak").default(0).notNull(),
+  lastDailyDate: varchar("last_daily_date", { length: 10 }),
+  completedDailies: json("completed_dailies").$type<string[]>().default([]).notNull(),
+  aiInstructor: boolean("ai_instructor").default(false).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+  xpIdx: index("xp_idx").on(table.xp),
+  levelIdx: index("level_idx").on(table.level),
+}));
+
+export type User = typeof users.$inferSelect;
+export type InsertUser = typeof users.$inferInsert;
+
+export type PlayerProgressDb = typeof playerProgress.$inferSelect;
+export type InsertPlayerProgress = typeof playerProgress.$inferInsert;
+
+export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true, lastLogin: true });
+export type InsertUserSchema = z.infer<typeof insertUserSchema>;
+
+export const registerSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  username: z.string().min(3, "Username must be at least 3 characters").max(50),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export const loginSchema = z.object({
+  emailOrUsername: z.string().min(1, "Email or username is required"),
+  password: z.string().min(1, "Password is required"),
+});
 
 export const aiConfigSchema = z.object({
   provider: z.enum(["openai", "huggingface", "custom"]),
@@ -88,7 +151,6 @@ export const reportSubmissionSchema = z.object({
 
 export type ReportSubmission = z.infer<typeof reportSubmissionSchema>;
 
-// XP and Level calculations
 export function calculateLevel(xp: number): number {
   return Math.floor(Math.sqrt(xp / 100)) + 1;
 }
