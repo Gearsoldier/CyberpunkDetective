@@ -21,6 +21,7 @@ const DEFAULT_PROGRESS: PlayerProgress = {
   dailyStreak: 0,
   lastDailyDate: undefined,
   completedDailies: [],
+  aiInstructor: false,
 };
 
 export async function getPlayerProgress(): Promise<PlayerProgress> {

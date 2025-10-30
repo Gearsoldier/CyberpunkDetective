@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const toolTypes = ["search", "whois", "metadata", "pastebin", "linkedin", "dns", "email"] as const;
+export const toolTypes = ["search", "whois", "metadata", "pastebin", "linkedin", "dns", "email", "cert", "breach"] as const;
 export type ToolType = typeof toolTypes[number];
 
 export const difficultyLevels = ["beginner", "intermediate", "advanced", "expert"] as const;
@@ -23,6 +23,10 @@ export interface Mission {
   };
   minLevel: number;
   xpReward: number;
+  act?: number; // Story act (1-3)
+  antagonistId?: string; // Reference to gang member
+  narrativeBeat?: string; // Story progression text
+  scriptureHint?: string; // Optional biblical reference
 }
 
 export interface Achievement {
@@ -51,6 +55,7 @@ export interface PlayerProgress {
   dailyStreak: number;
   lastDailyDate?: string; // YYYY-MM-DD format
   completedDailies: string[]; // daily case IDs
+  aiInstructor: boolean; // Enable AI-powered grading
 }
 
 export interface ToolResult {
