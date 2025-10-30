@@ -198,7 +198,7 @@ export default function ToolPanel({ availableTools }: ToolPanelProps) {
               </label>
               <div className="flex gap-2">
                 <Input
-                  placeholder="suspicious_photo.jpg"
+                  placeholder="Enter filename..."
                   value={metadataFile}
                   onChange={(e) => setMetadataFile(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleMetadata()}
@@ -236,7 +236,7 @@ export default function ToolPanel({ availableTools }: ToolPanelProps) {
               </label>
               <div className="flex gap-2">
                 <Input
-                  placeholder="a7f3k9m2"
+                  placeholder="Enter paste ID..."
                   value={pasteQuery}
                   onChange={(e) => setPasteQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handlePastebin()}
@@ -285,7 +285,7 @@ export default function ToolPanel({ availableTools }: ToolPanelProps) {
               </label>
               <div className="flex gap-2">
                 <Input
-                  placeholder="example.com"
+                  placeholder="Enter domain..."
                   value={certQuery}
                   onChange={(e) => setCertQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleCert()}
@@ -331,7 +331,7 @@ export default function ToolPanel({ availableTools }: ToolPanelProps) {
               </label>
               <div className="flex gap-2">
                 <Input
-                  placeholder="email or domain"
+                  placeholder="Enter email or domain..."
                   value={breachQuery}
                   onChange={(e) => setBreachQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleBreach()}

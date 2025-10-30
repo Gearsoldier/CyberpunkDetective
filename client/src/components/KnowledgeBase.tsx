@@ -44,12 +44,9 @@ export default function KnowledgeBase({ completedQuizzes, onQuizComplete }: Know
       .catch(err => console.error('Failed to load glossary:', err));
   }, []);
 
-  if (!glossaryData) {
-    return <div className="max-w-7xl mx-auto p-6">Loading Knowledge Base...</div>;
-  }
-
-  const terms = glossaryData.terms;
-  const categories = ["all", ...glossaryData.categories];
+  // All hooks must be called before any early returns
+  const terms = glossaryData?.terms || [];
+  const categories = glossaryData ? ["all", ...glossaryData.categories] : ["all"];
 
   const filteredTerms = useMemo(() => {
     return terms.filter(term => {
@@ -60,6 +57,11 @@ export default function KnowledgeBase({ completedQuizzes, onQuizComplete }: Know
       return matchesSearch && matchesCategory;
     });
   }, [terms, searchQuery, selectedCategory]);
+
+  // Early return AFTER all hooks
+  if (!glossaryData) {
+    return <div className="max-w-7xl mx-auto p-6">Loading Knowledge Base...</div>;
+  }
 
   const handleStartQuiz = (term: GlossaryTerm) => {
     setSelectedTerm(term);

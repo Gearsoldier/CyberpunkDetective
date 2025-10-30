@@ -350,7 +350,7 @@ export default function Home() {
                 )}
               </div>
               
-              <div className="hidden lg:block lg:h-[calc(100%-5rem)] overflow-y-auto space-y-4">
+              <div className="hidden lg:block space-y-4">
                 <CaseBrief mission={currentMission} />
                 <HintPanel
                   hints={(progress?.mode ?? "beginner") === "beginner" ? currentMission.hints.beginner : currentMission.hints.expert}
