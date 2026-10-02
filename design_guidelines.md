@@ -1,172 +1,111 @@
-# GEARZ OSINT Detective - Design Guidelines
+# GEARZ OSINT Detective: Design Guidelines
 
-## Design Approach
+A visual and interaction reference for maintaining the game's cyberpunk identity while keeping investigations readable and usable.
 
-**Selected Approach:** Reference-Based (Cyberpunk Gaming + Terminal Interface)
+These guidelines describe design intent and review criteria. They do not imply that every layout, accessibility behavior, or interaction below has already been implemented or verified.
 
-Drawing inspiration from cyberpunk games (Cyberpunk 2077, Deus Ex), terminal interfaces (Hack the Box, TryHackMe), and detective investigation boards. The aesthetic merges retro-futuristic terminals with modern web app usability, respecting the user's specified neon cyan + amber theme and glitchy HUD requirements.
+## Design direction
 
-**Core Principles:**
-- Terminal authenticity with modern usability
-- Information density without overwhelming
-- Responsive across all devices (desktop, tablet, mobile)
-- Immersive cyberpunk atmosphere
+The original references combine cyberpunk games such as Cyberpunk 2077 and Deus Ex, terminal-style learning environments such as Hack The Box and TryHackMe, and detective evidence boards. Use these as atmosphere references, not as a requirement to reproduce another product's assets or interface.
 
-## Typography
+Four principles guide new work:
 
-**Font Families:**
-- Primary (UI/Body): "Space Mono" or "Roboto Mono" (monospace for terminal feel)
-- Accent (Headers/Missions): "Orbitron" or "Rajdhani" (cyberpunk sci-fi)
-- System fallback: Courier New, monospace
+1. Make evidence and next steps easy to understand
+2. Use terminal styling without sacrificing ordinary web usability
+3. Keep the neon atmosphere focused and restrained
+4. Let small screens and keyboard users complete the same core investigation flow
 
-**Hierarchy:**
-- Mission Titles: 2xl to 3xl, uppercase, letter-spacing wide
-- Section Headers: xl to 2xl, semi-bold
-- Tool Labels: base to lg, uppercase tracking
-- Body/Instructions: sm to base, normal weight
-- Terminal Output: sm, monospace
-- HUD Stats: xs to sm, uppercase
+## Source of truth
 
-## Layout System
+| Concern | Current source |
+| --- | --- |
+| Colors, surfaces, effects, light/dark tokens | `client/src/index.css` |
+| Tailwind mappings and font families | `tailwind.config.ts` |
+| Page composition and view switching | `client/src/pages/Home.tsx` |
+| Game-specific panels | `client/src/components/` |
+| Shared primitives | `client/src/components/ui/` |
 
-**Spacing Primitives:** Tailwind units of 2, 4, 6, and 8 for consistency
-- Tight spacing: p-2, gap-2 (HUD elements, tool icons)
-- Standard spacing: p-4, gap-4 (cards, panels)
-- Generous spacing: p-6, gap-6 (major sections)
-- Section breaks: p-8, my-8 (between major areas)
+Prefer the existing CSS variables and UI primitives over new hard-coded values. Current components use Lucide React icons; do not introduce a separate icon CDN just to match the old design brief.
 
-**Grid Structure:**
-- Desktop: Multi-panel dashboard (3-column: tools sidebar 1/4, main content 2/4, report panel 1/4)
-- Tablet: Two-column (tools/content merged, report separate) or stacked tabs
-- Mobile: Single column with tabbed navigation
+## Color and typography
 
-**Container Approach:**
-- Full viewport height utilization (h-screen with overflow handling)
-- Panels use flex-1 for dynamic sizing
-- Max-width constraints on text-heavy content (max-w-2xl for readability)
+The base palette uses cyan for primary actions and investigation tools, amber for accents and rewards, and neutral dark surfaces for evidence. Preserve the existing light/dark tokens and selectable theme behavior when extending the interface.
 
-## Component Library
+- Use `primary`, `accent`, `background`, `foreground`, `muted`, and border tokens consistently
+- Keep decorative glow away from long text and fine detail
+- Pair status colors with text or icons; never make color the only signal
+- Check contrast in every supported theme
 
-### HUD (Heads-Up Display)
-- Fixed top bar spanning full width
-- Contains: Mission counter, progress indicator, settings icon, glitch effect decorations
-- Height: h-12 to h-16
-- Grid layout for stat displays: grid grid-cols-3 or flex justify-between
-- Scanline overlay effect for cyberpunk feel
+The CSS uses Space Mono / Roboto Mono-style monospace typography for its terminal character. The original brief also proposed Orbitron and Rajdhani for headings. Verify that any chosen font is actually loaded before relying on it, and provide a usable system fallback.
 
-### Case Brief Panel
-- Card-based design with terminal border aesthetic (border-2 with cyber corners)
-- Padding: p-6
-- Sections: Mission title, briefing text, objectives list, required tools badges
-- Scrollable content area with custom scrollbar styling
-- Glitch text effect on mission number/classification
+| Content | Suggested treatment |
+| --- | --- |
+| Mission title | Large, clear, with restrained letter spacing |
+| Section heading | Medium size and weight; concise wording |
+| Evidence and output | Monospace, selectable text, comfortable line height |
+| Instructions | Readable body size; avoid long all-caps passages |
+| XP, timer, and status | Compact but legible; clear units and labels |
 
-### Tool Panel
-- Vertical tab navigation on desktop (left sidebar)
-- Horizontal tabs on mobile (top of screen)
-- Each tool as distinct interface:
-  - Search: Input field with "EXECUTE SEARCH" button, results list
-  - WHOIS: Domain input, structured data output table
-  - Metadata: Image upload area, extracted data display
-  - Pastebin: Scrollable code block with line numbers
-- Tool icons with hover glow effects
-- Active tool highlighted with accent treatment
+## Layout and spacing
 
-### Report Box
-- Bottom-fixed on desktop (h-1/3 to h-2/5), full-height modal on mobile
-- Terminal-style text area (border, monospace font)
-- Submit button: Large, prominent, uppercase with scan-line animation
-- Character count indicator
-- Expandable/collapsible on desktop
+Use Tailwind's 2/4/6/8 spacing rhythm: tighter within a control group, more space between investigation stages. Keep long explanations at a readable maximum width.
 
-### Mentor Dialog
-- Modal overlay with backdrop blur
-- Terminal window aesthetic with ASCII art avatar
-- Feedback sections: Score display (large numerical), explanation text, technique breakdown
-- "NEXT MISSION" action button
-- Typing animation effect for text reveal
-- Dismiss with "X" or backdrop click
+The original brief envisioned a multi-panel desktop dashboard, a two-column tablet layout, and stacked or tabbed mobile content. Use the actual `Home.tsx` composition as the implementation baseline rather than assuming a specific three-column layout already exists.
 
-### Mission Selection Screen
-- Grid of mission cards: grid-cols-1 md:grid-cols-2 lg:grid-cols-3
-- Each card: Mission number badge, title, difficulty indicator, locked/unlocked state
-- Locked missions: Greyscale with lock icon
-- Hover effect: Elevation, border glow
-- Card padding: p-4 to p-6
+At narrow widths:
 
-### Settings Panel
-- Slide-in panel from right (desktop) or full-screen (mobile)
-- Sections with clear headers:
-  - API Configuration
-  - Provider Selection (dropdown)
-  - Step-by-step instructions (collapsible accordions)
-  - Test connection button
-- Form inputs with terminal styling
-- Code snippets for API examples (with copy button)
+- Stack content without hiding the current mission or primary action
+- Keep tab labels and form controls reachable without horizontal scrolling
+- Let long evidence wrap or scroll inside its own panel
+- Avoid fixed-height regions that trap important content
+- Keep dialogs usable when a software keyboard is open
 
-## Visual Elements
+## Component conventions
 
-**Borders & Containers:**
-- Use 1-2px borders with cyber-corner decorations (small angled cuts)
-- Double-border effect for emphasis (border + inner border)
-- Scanline overlay pattern on panels (subtle repeating horizontal lines)
+### HUD and mission selection
 
-**Glitch Effects:**
-- Apply sparingly to: Mission headers, HUD elements, "classified" badges
-- CSS-based glitch (no heavy animations)
-- Triggered on state changes (mission complete, new unlock)
+Keep the current case, level, XP, and navigation easy to locate. Mission cards should distinguish difficulty, available/locked status, and the requirement for unlocking. Use clear text alongside lock icons and reward styling.
 
-**Terminal Elements:**
-- Blinking cursor in active text inputs
-- Command prompt prefix ("> _") in input fields
-- Line numbers in code displays
-- Monospace alignment for structured data
+### Briefing and evidence tools
 
-**Icons:**
-- Use Font Awesome or Heroicons via CDN
-- Style: Outline/line icons fitting cyberpunk aesthetic
-- Standard icons: search, database, image, clipboard, settings, lock, check-circle
+Separate the story, investigation objective, available tools, and expected report task. Keep tool switching immediate, with a visible active tab.
 
-## Responsive Behavior
+Current tool panels display simulated search, WHOIS, metadata, paste, certificate, and breach-style evidence. Label simulations honestly. Do not imply that a metadata filename field performs a real upload or that an evidence panel queries the internet.
 
-**Desktop (lg and above):**
-- Three-panel dashboard layout
-- Persistent tool sidebar
-- Side-by-side content and report areas
-- Fixed HUD at top
+### Report submission
 
-**Tablet (md):**
-- Two-column when landscape, single when portrait
-- Tabbed interface for tools
-- Report panel as expandable drawer
+Provide a clear label, comfortable writing area, report-length guidance, and an obvious submit action. Preserve the user's report while a request is pending or fails. Loading, success, and error feedback should explain what happened without relying on animation alone.
 
-**Mobile (base):**
-- Single column stack
-- Bottom tab navigation (Tools, Brief, Report)
-- Full-screen modals for mentor feedback
-- Hamburger menu for settings
-- Collapsible sections to manage vertical space
+### Mentor feedback
 
-## Interaction Patterns
+Make the score, explanation, and next action distinct. Keep typewriter effects optional or skippable in future improvements. Current feedback is templated and the score is heuristic; interface copy should not imply a live AI review.
 
-- Tool switching: Instant (no page reload)
-- Report submission: Loading spinner with "ANALYZING..." text
-- Mission unlock: Brief celebration animation (border pulse)
-- Progress save: Auto-save with subtle indicator
-- Error states: Red terminal error message format
+### Settings and profile
 
-## Images
+Group display preferences separately from destructive actions. Reset should explain exactly what is lost and require a deliberate confirmation. Avoid encouraging real API-key entry while the current AI Settings fields remain disconnected from grading.
 
-**Hero/Welcome Screen:**
-- Full-viewport hero section on initial load
-- Abstract cyberpunk cityscape or digital matrix background
-- Centered logo/title with tagline
-- "START INVESTIGATION" CTA button with blurred backdrop
-- Fade-to-dashboard transition on click
+## Motion, imagery, and sound
 
-**In-Game:**
-- Mission thumbnails (if applicable): Small preview images in mission cards
-- Tutorial/Help: Optional diagram images for OSINT technique explanations
-- Mentor Avatar: Pixelated or line-art detective character (small, 64x64 to 128x128)
+Use borders, subtle scanlines, and short glow transitions to establish the setting. Reserve stronger glitch or celebration effects for brief state changes.
 
-All images should support the cyberpunk aesthetic with high contrast and technological themes.
+- Respect reduced-motion preferences when implementing or revising effects
+- Avoid flashing, persistent visual noise, or animation that obscures evidence
+- Keep decorative artwork out of the reading path
+- Use meaningful alternative text for informative images and empty alt text for decoration
+- Provide obvious sound controls and account for browser autoplay restrictions
+- Preserve asset attribution and confirm reuse rights before adding artwork, fonts, or music
+
+The original welcome-screen concept included a cyberpunk cityscape or digital-matrix backdrop, a centered title, and a prominent start action. Treat that as an optional direction rather than a claim about the current screen.
+
+## UI review checklist
+
+- Can a first-time player identify the next step without guessing?
+- Do text, controls, focus indicators, and status colors remain readable in all themes?
+- Can a keyboard user move through tools, submit a report, and dismiss a dialog?
+- Do Escape, Close, Back, and repeated actions leave a predictable screen state?
+- Do pending and failed requests preserve context and user-entered text?
+- Does the layout remain usable at narrow widths and with larger text?
+- Are simulated data, unfinished features, and scoring limits described accurately?
+- Are motion, sound, and decorative elements under the player's control?
+
+For behavior, setup, and security caveats, consult the [README](README.md) and [development notes](replit.md).

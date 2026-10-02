@@ -1,220 +1,106 @@
-# GEARZ OSINT Detective v2.0
+# GEARZ OSINT Detective: Development Notes
 
-## Project Overview
-A cyberpunk-themed educational OSINT (Open Source Intelligence) game that teaches real-world investigation skills through interactive missions. Players solve cases using simulated OSINT tools and receive AI-powered mentor feedback.
+This is the maintainer's reference for the current implementation. Start with the [README](README.md) for setup and the [design guide](design_guidelines.md) for UI conventions.
 
-## Features Implemented
+## Current implementation
 
-### Core Gameplay
-- **10 Progressive Missions**: From basic WHOIS lookups to advanced multi-source investigations
-- **OSINT Tools**: Search, WHOIS, Metadata Analysis, Pastebin viewer
-- **Dual Difficulty Modes**: Beginner (more hints, 1x XP) and Expert (limited hints, timed, 1.5x XP)
-- **Mission Timer**: Tracks completion time in Expert mode
-- **Hint System**: Context-sensitive hints that adapt to difficulty mode
+The active application contains 25 campaign missions, a React/TypeScript client, an Express API, and PostgreSQL persistence through Drizzle and the Neon serverless driver. Both the client and gameplay API import `client/src/lib/missions.ts`.
 
-### Progression System
-- **XP and Leveling**: Earn XP from missions, level up to unlock advanced cases
-- **10 Achievements**: Unlock badges for various accomplishments
-- **Level Requirements**: Missions unlock as players progress (server-enforced)
-- **Persistent Progress**: All progress saved in Replit Database
-- **Anti-Cheat**: Mission level gating, reduced XP for repeats (25% after first completion)
+`missions-25.ts` and `missions-backup.ts` are retained source variants, not the current imports. Check the active import path before editing mission content or documenting campaign counts.
 
-### Enhanced AI Mentor
-- **Personality System**: Mentor personality adapts based on player level
-- **Typewriter Effect**: Animated text display for immersive feedback
-- **"Explain Deeper" Feature**: Advanced technique breakdowns
-- **Dynamic Grading**: Score feedback with detailed analysis
+### Request and persistence flow
 
-### UI/UX Features
-- **Animated Background**: Cyberpunk grid with scanline effects
-- **Glassmorphism Design**: Neon cyan and amber theme
-- **Progress Tracking**: Visual XP bar and level display
-- **Case Archives**: Review completed missions with scores and replay functionality
-- **Achievements Page**: Track unlocked badges and completion progress
-- **Fully Responsive**: Optimized for desktop, tablet, and mobile
+1. `server/index.ts` installs PostgreSQL-backed session middleware and request parsing
+2. `server/authRoutes.ts` provides local account registration and sign-in
+3. `server/routes.ts` handles gameplay using the authenticated session's user ID
+4. `server/storage.ts` reads and writes the tables in `shared/schema.ts`
+5. In development, Express mounts Vite; in production, it serves the built client
 
-### Navigation
-- Main dashboard with mission selection
-- Case archives for reviewing completed investigations
-- Achievements gallery
-- Settings panel for AI configuration
+`server/db.ts` creates the database connection. Its `initializeDatabase()` function only logs a message; it does not create the application tables. Use the explicit `npm run db:push` command against an appropriate development database.
 
-## Tech Stack
-- **Frontend**: React + TypeScript, TailwindCSS, Wouter routing
-- **Backend**: Express.js with server-side validation
-- **Database**: Replit Database (@replit/database)
-- **UI Components**: shadcn/ui with custom cyberpunk theming
-- **State Management**: TanStack Query for server state
-- **Validation**: Zod schemas for API security
+## Local and Replit configuration
 
-## Security & Data Integrity
+The checked-in `.replit` file selects Node.js 20 and PostgreSQL 16, runs `npm run dev`, and maps application port `5000`. Its deployment configuration builds with `npm run build` and runs `npm run start`.
 
-### Server-Side Progression Control
-- All XP, levels, and achievements computed server-side
-- Mission level requirements enforced (403 error if player level too low)
-- Score capped to 0-100 range
-- Reduced XP for repeated missions (first: 100%, repeats: 25%)
-- No client-controlled progression endpoints
+Set `DATABASE_URL` and `SESSION_SECRET` through the runtime's environment or private secret settings. `PORT` is optional outside Replit and defaults to `5000`. No AI credentials are needed for current gameplay. The scripts do not load a `.env` file automatically.
 
-### Known Limitations (Prototype/Demo)
-- **Mock AI Scoring**: Currently uses client-side mock scores (marked with //todo comments)
-- **Production Ready**: In real deployment, report text would be sent to server, AI scoring would happen server-side, and only server-computed scores would be used
-- This prototype demonstrates the game mechanics and UI; real AI integration would add server-side report analysis
+These settings describe the intended launch process, not a verified public deployment. The existing Neon driver needs a compatible database transport. Production cookies require HTTPS, and a reverse-proxy deployment must account for the server's current lack of explicit proxy-trust configuration.
 
-## File Structure
-```
-client/
-├── src/
-│   ├── components/
-│   │   ├── HUD.tsx - Top navigation bar
-│   │   ├── MissionSelector.tsx - Mission selection grid
-│   │   ├── CaseBrief.tsx - Mission briefing panel
-│   │   ├── ToolPanel.tsx - OSINT investigation tools
-│   │   ├── ReportBox.tsx - Report submission interface
-│   │   ├── EnhancedMentorDialog.tsx - AI feedback dialog
-│   │   ├── SettingsPanel.tsx - AI configuration
-│   │   ├── ProgressBar.tsx - XP and level display
-│   │   ├── ModeSelector.tsx - Beginner/Expert mode
-│   │   ├── MissionTimer.tsx - Mission completion timer
-│   │   ├── HintPanel.tsx - Progressive hint system
-│   │   ├── CaseArchives.tsx - Completed missions archive
-│   │   ├── AchievementsList.tsx - Achievement gallery
-│   │   ├── AnimatedBackground.tsx - Cyberpunk effects
-│   │   └── TypewriterText.tsx - Animated text component
-│   ├── lib/
-│   │   ├── missions.ts - 10 mission definitions
-│   │   ├── toolData.ts - Simulated OSINT data
-│   │   └── achievements.ts - Achievement definitions
-│   ├── pages/
-│   │   └── Home.tsx - Main application page
-│   └── App.tsx - Application root
-│
-server/
-├── db.ts - Replit Database integration
-└── routes.ts - Validated API endpoints
+## API map
 
-shared/
-└── schema.ts - TypeScript types and validation schemas
-```
+Unless marked public, routes require a valid authenticated session.
 
-## API Endpoints
-- `GET /api/progress` - Fetch player progress (read-only)
-- `POST /api/mission/complete` - Complete a mission with server-side validation
-  - Validates mission level requirements
-  - Caps scores to 0-100
-  - Computes XP with anti-cheat measures
-  - Awards achievements
-- `POST /api/progress/reset` - Reset progress (testing/admin only)
+| Method | Route | Purpose |
+| --- | --- | --- |
+| POST | `/api/auth/register` | Public account registration |
+| POST | `/api/auth/login` | Public sign-in using email or username |
+| POST | `/api/auth/logout` | Destroy the current session |
+| GET | `/api/auth/me` | Return the signed-in account; otherwise `401` |
+| GET | `/api/progress` | Read the current player's progress |
+| POST | `/api/mission/complete` | Validate and score a report, then update progress |
+| POST | `/api/progress/mode` | Select Beginner or Expert mode |
+| POST | `/api/progress/codename` | Set a codename and complete the introduction |
+| POST | `/api/progress/reset` | Reset the signed-in player's progress |
+| POST | `/api/quiz/complete` | Record a quiz result and eligible XP |
+| GET | `/api/daily` | Read the daily case assignment |
+| POST | `/api/daily/complete` | Record a daily completion and streak reward |
+| GET | `/api/leaderboard` | Public leaderboard |
+| POST | `/api/profile/update` | Update supported profile fields |
 
-## Data Models
+The reset route is available to the authenticated player, not an admin-only endpoint. It is destructive to that player's progress.
 
-### PlayerProgress
-```typescript
-{
-  xp: number;
-  level: number;
-  completedMissions: number[];
-  achievements: string[];
-  missionScores: Record<number, number>;
-  missionAttempts: Record<number, number>;
-  totalPlayTime: number;
-  mode: "beginner" | "expert";
-}
-```
+## Report scoring and progression
 
-### Mission
-```typescript
-{
-  id: number;
-  title: string;
-  brief: string;
-  difficulty: "beginner" | "intermediate" | "advanced" | "expert";
-  tools: ToolType[];
-  solution: Record<string, string>;
-  explanation: string;
-  hints: { beginner: string[]; expert: string[] };
-  minLevel: number;
-  xpReward: number;
-}
-```
+The mission-completion request includes `missionId`, `report`, `timeElapsed`, and `timestamp`. The route validates report length from 10 to 5,000 characters, checks the mission exists, and enforces its minimum level.
 
-## Design System
-- **Primary Color**: Cyan (#187580) - OSINT tools, borders
-- **Accent Color**: Amber (#F59E0B) - Highlights, achievements
-- **Fonts**:
-  - Headers: Orbitron (cyberpunk branding)
-  - UI Labels: Rajdhani (technical aesthetic)
-  - Code/Data: Space Mono (terminal style)
-- **Icons**: Lucide React (no emoji anywhere in the app)
+The active score calculation in `server/routes.ts` is:
 
-## Game Mechanics
+- Start at 50 points
+- Add 10 points for a report longer than 100 characters
+- Add another 10 points for a report longer than 200 characters
+- Add up to 30 points for case-insensitive substring matches against the mission's solution values
+- Round and cap the result at 100
 
-### XP System
-- Base XP per mission varies (100-500 based on difficulty)
-- Expert mode: 1.5x multiplier
-- Score multiplier: 0-100% based on assessment
-- Repeat penalty: 25% XP on subsequent completions
-- Formula: `XP = baseXP × modeMultiplier × (score/100) × repeatMultiplier`
+The server derives mission XP from the mission reward, the saved mode, and the score. Expert mode multiplies XP by 1.5. The initial result is rounded down; repeated completions receive 25% of that result, rounded down again. Best mission scores are retained, and attempt counts increase.
 
-### Level Progression
-- Level = floor(sqrt(XP / 100)) + 1
-- XP for next level = (currentLevel)² × 100
-- Missions unlock at specific levels (server-enforced)
+Level calculation is `floor(sqrt(XP / 100)) + 1`. Achievement checks run after the mission progress update is constructed.
 
-### Achievements
-- First Steps: Complete first mission
-- Metadata Master: Complete 3 metadata missions
-- Dork Lord: Complete 5 missions
-- WHOIS Wizard: Perfect score on WHOIS investigation
-- Perfectionist: 100% on 3 missions
-- Level milestones: 5, 10
-- Expert Mode: Complete mission in expert mode
-- Master Detective: Complete all missions
+These controls are useful prototype mechanics, not comprehensive anti-cheat. Quiz results accept a client-supplied numeric score, daily completion accepts a supplied ID, and recorded elapsed time comes from the client. The current daily assignment rotates through mission IDs 1–15, even though the campaign has 25 missions.
 
-## Future Enhancements
-- Real AI API integration (server-side report analysis)
-- Sound effects and audio feedback
-- More advanced OSINT tools (Shodan, Certificate Transparency)
-- Multiplayer leaderboards
-- Custom mission editor
-- Export reports as PDF
-- Social features (share achievements)
+## AI and simulated tools
 
-## AI Configuration
-Users can configure their own AI mentor by providing:
-- Provider: OpenAI, Hugging Face, or custom endpoint
-- API Key: User's own key
-- Model: Specific model name
-- Endpoint: API URL
+The game uses local fixtures for investigation output. It does not query real targets. `ToolPanel.tsx` renders search, WHOIS, metadata, paste, certificate, and breach panels; some tool types present in mission definitions have no matching panel yet.
 
-Built-in instructions guide users to obtain free Hugging Face API keys.
+The report submission route uses its own heuristic, while `Home.tsx` constructs templated feedback from the returned score. `EnhancedMentorDialog.tsx` supplies explanatory UI text.
 
-## Development Notes
-- All OSINT data is simulated - no real network calls
-- Mock data clearly marked with //todo comments
-- Progress persists in Replit Database
-- Fully type-safe with TypeScript
-- Server-side validation with Zod schemas
-- Responsive design with mobile-first approach
-- No emoji characters (Lucide icons only)
+`server/ai-instructor.ts` contains a separate OpenAI-compatible integration helper, but the active gameplay route does not import or call it. Its environment options are implementation scaffolding, not required setup steps.
 
-## Security Measures
-- Mission level gating prevents accessing locked content
-- Score validation (0-100 range enforced)
-- XP penalties for mission replays
-- No client-controlled progression
-- Zod schema validation on all API inputs
+The Settings screen stores AI configuration in browser local storage without connecting it to grading. Do not enter real credentials. Future integration work should keep provider credentials on the server and explicitly define what report data is sent to the provider.
 
-## Recent Changes (v2.0)
-- Added progression system with XP, levels, achievements
-- Expanded from 5 to 10 missions
-- Enhanced AI mentor with personality and typewriter effects
-- Added beginner/expert modes
-- Implemented mission timer
-- Created case archives and achievements pages
-- Added animated cyberpunk background
-- Improved mobile responsiveness
-- Integrated Replit Database for persistence
-- Implemented server-side anti-cheat measures
-- Removed all emoji (Lucide icons only)
-- Added comprehensive API validation
+## Data and deployment review
+
+- PostgreSQL stores accounts, password hashes, progress, and sessions
+- Some display/profile preferences are browser-local, so they should not all be described as synchronized account settings
+- The registered service worker caches successful same-origin responses without a dedicated private-API exclusion; assess cache invalidation and user separation before deployment
+- Request/response logging and browser debug logs should be reviewed before using real account details or reports
+- Authentication, authorization, input validation, transaction consistency, and abuse resistance require a separate security review
+
+## Verification checklist
+
+Before proposing a code change:
+
+1. Run `npm run check` and `npm run build`
+2. Confirm registration, sign-in, sign-out, and session persistence on a disposable database
+3. Complete an unlocked mission, replay it, switch mode, and verify XP and best-score behavior
+4. Review locked missions, quizzes, daily cases, leaderboard output, and profile changes
+5. Test narrow layouts, keyboard navigation, dialog dismissal, and browser Back/Forward
+6. Check refresh and sign-out behavior with the service worker enabled
+7. Exercise progress reset only with disposable test data
+
+There is no automated test script in the package manifest. This checklist is a suggested review workflow, not a claim that these checks have already passed.
+
+## Historical context
+
+The earlier v2.0 notes recorded a five-to-ten-mission expansion, progression and achievements, Beginner/Expert modes, a timer, case archives, animated backgrounds, mobile-layout work, server-side validation, and a move to Replit Database. Those notes also proposed AI grading, audio, more tools, leaderboards, and report export as future work.
+
+Those descriptions belong to an earlier iteration. The current source has 25 missions and PostgreSQL persistence; audio, additional tool panels, learning screens, and leaderboard code are now present. Live AI grading and PDF report export should not be inferred from the older roadmap. The original development prompt under `attached_assets/` is preserved as a historical input, not a current specification.
